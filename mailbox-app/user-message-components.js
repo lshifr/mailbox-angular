@@ -1,6 +1,14 @@
-
 angular.module('messages', []);
 var module = angular.module('messages');
+
+module.factory('messages', ['$http', function ($http) {
+    return {
+        getMessages: function () {
+            //Return a promise
+            return $http.get('user-messages.json')
+        }
+    }
+}]);
 
 module.component(
     'userMessage', {
@@ -15,12 +23,13 @@ module.component(
     'messageBox',
     {
         templateUrl: "mailbox.html",
-        controller: function ($http) {
+        controller: ['messages', function (messages) {
             var self = this;
-            $http.get('user-messages.json').then(function(response) {
+            messages.getMessages().then(function (response) {
                 self.messages = response.data;
             });
         }
+        ]
     }
 );
 

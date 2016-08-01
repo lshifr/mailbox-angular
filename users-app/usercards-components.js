@@ -1,4 +1,11 @@
 angular.module('users', [])
+    .factory('users', ['$http', function($http){
+        return {
+            getUsers: function(){
+                return $http.get('users.json')
+            }
+        }
+    }])
     .component(
         'userAvatar',
         {
@@ -18,11 +25,11 @@ angular.module('users', [])
     ).component('allUserCards',
     {
         templateUrl: "all-user-cards.html",
-        controller: function($http){
+        controller: ['users', function(users){
             var self = this;
-            $http.get('users.json').then(function(response) {
+            users.getUsers().then(function(response) {
                 self.users = response.data;
             });
-        }
+        }]
     }
 );
