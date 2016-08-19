@@ -1,0 +1,1 @@
+var mailbox = angular.module('mailbox',[]);

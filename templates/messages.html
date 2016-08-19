@@ -1,0 +1,39 @@
+<table class="table" style="border-bottom: 1px solid #a0a0a0">
+    <thead>
+    <tr>
+        <th style="width: 10%"></th>
+        <th style="width: 7%"></th>
+        <th style="width: 20%"></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="message in $ctrl.messages">
+        <td style="vertical-align: middle">
+            <div style="display: block;vertical-align: middle">
+                <input type="checkbox" style="display: inline-block">
+                <div style="display: inline-block; margin-left: 10px;vertical-align: bottom">
+                                <span
+                                        class="glyphicon glyphicon-star-empty"
+                                        aria-hidden="true"
+                                        style="font-size: 1.2em; top:3px;"></span>
+                </div>
+            </div>
+        </td>
+        <td style="vertical-align: middle">
+            <img class="img-circle user-avatar" src="{{$ctrl.getUser(message).avatarUrl}}">
+        </td>
+        <td style="vertical-align: middle; font-size: 12px;">
+            <span>
+                {{$ctrl.fullName($ctrl.getUser(message))}}
+            </span>
+        </td>
+        <td style="font-size: 10px; text-align: justify">
+            <span>
+                {{$ctrl.briefContents(message.text)}}
+            </span>
+
+        </td>
+    </tr>
+    </tbody>
+</table>

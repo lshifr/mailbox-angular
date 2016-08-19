@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h5 class="text-center">Contacts</h5>
+    </div>
+
+    <table style="" class="table borderless">
+        <tbody>
+        <tr ng-repeat="user in $ctrl.users">
+            <td><a href="#" ng-bind="$ctrl.fullName(user)"></a></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
