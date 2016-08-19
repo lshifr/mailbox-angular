@@ -1,9 +1,8 @@
 angular.module('users', [])
     .factory('users', ['$http', function($http){
-        var baseURL = "http://127.0.0.1:8000/";
         return {
             getUsers: function(){
-                return $http.get(baseURL+"users/")
+                return $http.get('users.json')
             }
         }
     }])
@@ -21,12 +20,7 @@ angular.module('users', [])
             bindings:{
                 user: "<"
             },
-            templateUrl: "user-card.html",
-            controller: function(){
-                this.fullName = function(user){
-                    return user.firstName + '  '+ user.lastName;
-                }
-            }
+            templateUrl: "user-card.html"
         }
     ).component('allUserCards',
     {
