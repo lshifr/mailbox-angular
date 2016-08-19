@@ -1,0 +1,113 @@
+.mailbox{
+    margin-top: 20px;
+}
+
+.border-between > [class*='col-']:before {
+    background: #e3e3e3;
+    bottom: 0;
+    content: " ";
+    left: 0;
+    position: absolute;
+    width: 1px;
+    top: 0;
+}
+
+.border-between > [class*='col-']:first-child:before {
+    display: none;
+}
+
+.borderless td, .borderless th {
+    border: none;
+}
+
+.borderless tr {
+    border-bottom: none;
+    border-top: none;
+}
+
+.borderless > tbody > tr > td, .borderless > tfoot > tr > td {
+    border: none;
+}
+
+.btn:focus, .btn:active {
+    outline: none !important;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+}
+
+
+/* Message controls */
+
+.move-to-folder-btn{
+    margin-left: 10px;
+}
+
+.msg-controls{
+    margin-bottom: 10px;
+}
+
+
+/* Folder list */
+
+.folder-list{
+    margin-top:50px;
+}
+
+
+/* Message grid */
+
+th.msg-inline-controls{
+    width: 10%;
+}
+
+th.msg-inline-avatar{
+    width: 7%;
+}
+
+th.msg-inline-sender-name{
+    width: 20%;
+}
+
+tr.single-message > td.msg-inline-controls {
+    vertical-align: middle;
+}
+
+.msg-inline-controls > div {
+    display: block;
+}
+
+.msg-select{
+    display: inline-block;
+}
+
+.msg-star{
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: bottom;
+}
+
+.msg-star-inner{
+    font-size: 1.2em;
+    top:3px;
+}
+
+td.msg-inline-avatar{
+    vertical-align: middle;
+}
+
+tr.single-message > td.msg-inline-sender-name{
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.msg-inline-brief-conts{
+    font-size: 10px;
+    text-align: justify;
+}
+
+.msg-table{
+    border-bottom: 1px solid #a0a0a0;
+}

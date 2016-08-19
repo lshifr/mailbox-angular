@@ -1,38 +1,38 @@
-<table class="table" style="border-bottom: 1px solid #a0a0a0">
+<table class="table msg-table">
     <thead>
     <tr>
-        <th style="width: 10%"></th>
-        <th style="width: 7%"></th>
-        <th style="width: 20%"></th>
+        <th class="msg-inline-controls"></th>
+        <th class="msg-inline-avatar"></th>
+        <th class="msg-inline-sender-name"></th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="message in $ctrl.messages">
-        <td style="vertical-align: middle">
-            <div style="display: block;vertical-align: middle">
-                <input type="checkbox" style="display: inline-block">
-                <div style="display: inline-block; margin-left: 10px;vertical-align: bottom">
-                                <span
-                                        class="glyphicon glyphicon-star-empty"
-                                        aria-hidden="true"
-                                        style="font-size: 1.2em; top:3px;"></span>
+    <tr class="single-message" ng-repeat="message in $ctrl.messages">
+        <td class="msg-inline-controls">
+            <div>
+                <input type="checkbox" class="msg-select">
+                <div class="msg-star">
+                    <span
+                            class="glyphicon glyphicon-star-empty msg-star-inner"
+                            aria-hidden="true"
+                    >
+                    </span>
                 </div>
             </div>
         </td>
-        <td style="vertical-align: middle">
+        <td class="msg-inline-avatar">
             <img class="img-circle user-avatar" src="{{$ctrl.getUser(message).avatarUrl}}">
         </td>
-        <td style="vertical-align: middle; font-size: 12px;">
+        <td class="msg-inline-sender-name">
             <span>
                 {{$ctrl.fullName($ctrl.getUser(message))}}
             </span>
         </td>
-        <td style="font-size: 10px; text-align: justify">
+        <td class="msg-inline-brief-conts">
             <span>
                 {{$ctrl.briefContents(message.text)}}
             </span>
-
         </td>
     </tr>
     </tbody>

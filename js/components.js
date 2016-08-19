@@ -25,6 +25,10 @@ mailbox.component('userList', {
 
 });
 
+mailbox.component('messageControls', {
+    templateUrl: 'templates/message-controls.html'
+});
+
 mailbox.component('messages', {
    templateUrl: 'templates/messages.html',
     bindings: {},
