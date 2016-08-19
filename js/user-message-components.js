@@ -22,7 +22,7 @@ module.component(
 module.component(
     'messageBox',
     {
-        templateUrl: "mailbox.html",
+        templateUrl: "mailbox_old.html",
         controller: ['messages', function (messages) {
             var self = this;
             messages.getMessages().then(function (response) {

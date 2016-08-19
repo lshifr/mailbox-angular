@@ -1,5 +1,31 @@
-<ul style="list-style: none">
-    <li ng-repeat="message in $ctrl.messages">
-        <user-message message="message"></user-message>
-    </li>
-</ul>
+<div class="row border-between mailbox">
+
+    <div class="col-md-3">
+
+        <button class="btn btn-danger">Compose</button>
+
+        <folder-list></folder-list>
+
+        <user-list
+                users="$ctrl.users"
+                full-user-name="$ctrl.fullUserName(user)"
+        ></user-list>
+
+    </div>
+
+    <div class="col-md-9">
+
+        <message-controls></message-controls>
+
+        <messages
+                users="$ctrl.users"
+                full-user-name="$ctrl.fullUserName(user)"
+                messages="$ctrl.messages"
+                get-message-sender="$ctrl.getMessageSender(message)"
+        >
+
+        </messages>
+
+    </div>
+
+</div>

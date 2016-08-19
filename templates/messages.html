@@ -22,11 +22,11 @@
             </div>
         </td>
         <td class="msg-inline-avatar">
-            <img class="img-circle user-avatar" src="{{$ctrl.getUser(message).avatarUrl}}">
+            <img class="img-circle user-avatar" src="{{$ctrl.getMessageSender({message:message}).avatarUrl}}">
         </td>
         <td class="msg-inline-sender-name">
             <span>
-                {{$ctrl.fullName($ctrl.getUser(message))}}
+                {{$ctrl.fullUserName({user: $ctrl.getMessageSender({message:message})})}}
             </span>
         </td>
         <td class="msg-inline-brief-conts">
