@@ -37,7 +37,7 @@ mailbox.component('folderList', {
     templateUrl: 'templates/folders.html',
     bindings: {},
     controller: function () {
-        this.folderNames = ['Входящие', 'Исходящие', 'Удаленные', 'Спам'];
+        this.folderNames = ['Inbox', 'Sent', 'Trash', 'Spam'];
     }
 });
 
@@ -75,6 +75,6 @@ mailbox.component('messages', {
             var SHOWN_LENGTH = 150;
             return (msg.length <= SHOWN_LENGTH) ? msg : msg.substring(0, SHOWN_LENGTH) + '...';
         };
-        
+
     }
 });
