@@ -1,0 +1,70 @@
+<style>
+    .m-over{
+        background: #f5f5f5;
+    }
+</style>
+
+
+<div class="row">
+
+    <h1 style="margin-top: 50px; margin-bottom: 50px;text-align: center">
+        <small>Current contacts</small>
+    </h1>
+
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8">
+        <button class="btn btn-danger pull-right">Add contact</button>
+        <input class="form-control" type="text" style="width: 200px;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 15%"></th>
+                    <th style="width: 40%"></th>
+                    <th style="width: 30%"></th>
+                    <th style="width: 15%"></th>
+                </tr>
+            </thead>
+            <tr
+                    ng-repeat="contact in $ctrl.contacts"
+                    ng-mouseover="mouseOver=true"
+                    ng-mouseleave="mouseOver=false"
+                    ng-class="{'m-over': mouseOver}"
+            >
+                <td class="msg-inline-avatar">
+                    <img class="img-circle user-avatar" ng-src="{{contact.avatarUrl}}">
+                </td>
+                <td class="msg-inline-sender-name">
+                    <span>
+                        {{$ctrl.fullUserName(contact)}}
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        {{contact.email}}
+                    </span>
+                </td>
+                <td style="vertical-align: middle">
+                    <div ng-if="mouseOver">
+                        <span
+                                class="glyphicon glyphicon-trash"
+                                aria-hidden="true"
+                                style="cursor: pointer; padding: 0 5px 0 5px"
+                        ></span>
+
+                        <span
+                                class="glyphicon glyphicon-pencil"
+                                aria-hidden="true"
+                                style="cursor: pointer; padding: 0 5px 0 5px"
+                        ></span>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-md-2"></div>
+
+</div>

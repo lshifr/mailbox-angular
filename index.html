@@ -18,8 +18,7 @@
 
 <body>
 
-<div class="navbar navbar-default navbar-fixed-top">
-    <!-- <div class="navbar-inner"> -->
+<div class="navbar navbar-default .navbar-static-top">
     <div class="container">
 
         <div class="navbar-header">
@@ -27,15 +26,10 @@
         </div>
 
         <ul class="nav navbar-nav">
-
-            <!-- Here you can see ui-sref in action again. Also notice the use of $state.includes, which
-                 will set the links to 'active' if, for example on the first link, 'contacts' or any of
-                 its descendant states are activated. -->
-            <li ng-class="{active: true}"><a ui-sref="mailbox">Messages</a></li>
+            <li ng-class="{active: $state.includes('mailbox')}"><a ui-sref="mailbox">Messages</a></li>
             <li ui-sref-active="active"><a ui-sref="contacts">Contacts</a></li>
         </ul>
     </div>
-    <!-- </div> -->
 </div>
 
 

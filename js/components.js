@@ -1,34 +1,19 @@
+mailbox.component('main',{
+
+});
+
 mailbox.component('mailbox', {
+    bindings: {
+        messages: '<',
+        users: '<'
+    },
     templateUrl: 'templates/mailbox.html',
-    controller: function (httpFacade) {
-        var self = this;
-
-        this.buildUserHash = function () {
-            this.userHash = {};
-            this.users.forEach(user => self.userHash[user.id] = user);
+    controller: function (httpFacade, mailboxUtils) {
+        var _userHash = mailboxUtils.collectionIdHash(this.users);
+        this.fullUserName = mailboxUtils.fullUserName;
+        this.getMessageSender = message => {
+            return _userHash[message.sender];
         };
-
-        this.updateUsers = function () {
-            return httpFacade.getUsers().then(response => {
-                self.users = response.data;
-                self.buildUserHash();
-            });
-        };
-
-        this.updateMessages = function () {
-            return httpFacade.getMessages().then(response => self.messages = response.data);
-        };
-
-        this.getMessageSender = function (message) {
-            return this.userHash[message.sender];
-        };
-
-        this.fullUserName = function (user) {
-            //console.log(user);
-            return user.firstName + '  ' + user.lastName;
-        };
-
-        this.updateUsers().then(()=> self.updateMessages());
     }
 });
 
@@ -60,6 +45,18 @@ mailbox.component('messageControls', {
 });
 
 
+
+mailbox.component('testMsg', {
+    template: '<td>{{$ctrl.message.text}}</td>',
+    bindings: {
+        message:'<'
+    },
+    controller: function(){
+
+    }
+});
+
+
 mailbox.component('messages', {
     templateUrl: 'templates/messages.html',
     bindings: {
@@ -69,12 +66,20 @@ mailbox.component('messages', {
         fullUserName: '&'
 
     },
-    controller: function (httpFacade) {
+    controller: function (mailboxUtils) {
+        this._SHOWN_LENGTH = 150;
+        this.briefContents = mailboxUtils.cutString(this._SHOWN_LENGTH);
+    }
+});
 
-        this.briefContents = function (msg) {
-            var SHOWN_LENGTH = 150;
-            return (msg.length <= SHOWN_LENGTH) ? msg : msg.substring(0, SHOWN_LENGTH) + '...';
-        };
+mailbox.component('contacts',{
+    templateUrl: 'templates/contacts.html',
+    controller: function(httpFacade, mailboxUtils){
+        var _self = this;
+        this.fullUserName = mailboxUtils.fullUserName;
+        httpFacade.getUsers().then(users => _self.contacts = users)
+            //.then(() => console.log(_self.contacts));
+        ;
 
     }
 });
