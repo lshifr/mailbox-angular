@@ -1,3 +1,11 @@
+.welcome{
+    margin-top: 150px;
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    padding: 50px 0 50px 0;
+    color: #959595;
+}
+
 .mailbox{
     margin-top: 0px;
 }

@@ -72,14 +72,12 @@ mailbox.component('messages', {
     }
 });
 
-mailbox.component('contacts',{
-    templateUrl: 'templates/contacts.html',
+mailbox.component('contactsList',{
+    templateUrl: 'templates/contacts-list.html',
+    bindings: {
+        contacts: '<users'
+    },
     controller: function(httpFacade, mailboxUtils){
-        var _self = this;
         this.fullUserName = mailboxUtils.fullUserName;
-        httpFacade.getUsers().then(users => _self.contacts = users)
-            //.then(() => console.log(_self.contacts));
-        ;
-
     }
 });

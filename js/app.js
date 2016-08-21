@@ -12,7 +12,7 @@ mailbox.run(
 mailbox.config($stateProvider => {
     $stateProvider.state('home', {
             url: '/',
-            template: '<h2 style="margin-top: 200px; text-align: center">Welcome to the mailbox app!</h2>'
+            template: '<h2 class="welcome well">Welcome to the mailbox app!</h2>'
         }
     );
 
@@ -36,7 +36,21 @@ mailbox.config($stateProvider => {
 
     $stateProvider.state('contacts', {
         url: '/contacts',
-        template: '<contacts></contacts>'
+        abstract: true,
+        template: '<ui-view/>'
+    });
+
+    $stateProvider.state('contacts.list',{
+        url: '',
+        resolve:{
+            users: function(httpFacade){
+                return httpFacade.getUsers()
+            }
+        },
+        controller: function($scope, users){
+            $scope.users = users;
+        },
+        template: '<contacts-list users="users"></contacts-list>'
     });
 
 });
