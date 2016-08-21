@@ -25,9 +25,11 @@
             <img class="img-circle user-avatar" data-ng-src="{{$ctrl.getMessageSender({message:message}).avatarUrl}}">
         </td>
         <td class="msg-inline-sender-name">
-            <span>
-                {{$ctrl.fullUserName({user: $ctrl.getMessageSender({message:message})})}}
-            </span>
+            <a ui-sref="contacts.person({contactId: message.sender})">
+                <span>
+                    {{$ctrl.fullUserName({user: $ctrl.getMessageSender({message:message})})}}
+                </span>
+            </a>
         </td>
         <td class="msg-inline-brief-conts">
             <span>

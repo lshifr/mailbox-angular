@@ -25,12 +25,10 @@
                     ng-class="{'m-over': mouseOver}"
             >
                 <td class="msg-inline-avatar">
-                    <img class="img-circle user-avatar" ng-src="{{contact.avatarUrl}}">
+                    <img class="img-circle user-avatar pool-right-tiny" ng-src="{{contact.avatarUrl}}">
                 </td>
                 <td class="msg-inline-sender-name">
-                    <span>
-                        {{$ctrl.fullUserName(contact)}}
-                    </span>
+                    <a ui-sref="contacts.person({contactId: contact.id})"><span>{{$ctrl.fullUserName(contact)}}</span></a>
                 </td>
                 <td>
                     <span>

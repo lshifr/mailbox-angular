@@ -6,7 +6,7 @@
     <table style="" class="table borderless">
         <tbody>
         <tr ng-repeat="user in $ctrl.users">
-            <td><a href="#" ng-bind="$ctrl.fullUserName({user:user})"></a></td>
+            <td><a ui-sref="contacts.person({contactId: user.id})">{{$ctrl.fullUserName({user:user})}}</a></td>
         </tr>
         </tbody>
     </table>
