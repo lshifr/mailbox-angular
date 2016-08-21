@@ -2,6 +2,7 @@ mailbox.component('main',{
 
 });
 
+
 mailbox.component('mailbox', {
     bindings: {
         messages: '<',
@@ -72,12 +73,24 @@ mailbox.component('messages', {
     }
 });
 
+
 mailbox.component('contactsList',{
     templateUrl: 'templates/contacts-list.html',
     bindings: {
-        contacts: '<users'
+        contacts: '<'
     },
     controller: function(httpFacade, mailboxUtils){
         this.fullUserName = mailboxUtils.fullUserName;
+    }
+});
+
+
+mailbox.component('userInfo', {
+    templateUrl: 'templates/user-card.html',
+    bindings: {
+        user: '<'
+    },
+    controller: function(mailboxUtils){
+        this.fullName = mailboxUtils.fullUserName;
     }
 });

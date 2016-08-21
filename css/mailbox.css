@@ -1,3 +1,21 @@
+/* Make all Bootsrap columns in a row be equal height. We only restrict it to user-info class DOM descendants */
+
+.user-info > .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user-info > .row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Welcome page */
+
 .welcome{
     margin-top: 150px;
     text-align: center;
@@ -5,6 +23,8 @@
     padding: 50px 0 50px 0;
     color: #959595;
 }
+
+/* Mailbox view */
 
 .mailbox{
     margin-top: 0px;
@@ -46,6 +66,11 @@
     height: 30px;
 }
 
+.user-avatar-lrg {
+    width: 100px;
+    height:100px;
+}
+
 
 /* Message controls */
 
@@ -55,6 +80,16 @@
 
 .msg-controls{
     margin-bottom: 10px;
+    display: block;
+}
+
+.msg-search{
+    width: 200px;
+    display: inline-block;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 25px;
+    margin-right: 20px;
 }
 
 
@@ -118,4 +153,19 @@ tr.single-message > td.msg-inline-sender-name{
 
 .msg-table{
     border-bottom: 1px solid #a0a0a0;
+}
+
+/* User info view */
+
+.usercard-img-center {
+    margin-top: 30%;
+    margin-left: 30%;
+}
+
+.userinfo-buttons{
+    margin-top: 20px;
+}
+
+.m-over {
+    background: #f5f5f5;
 }

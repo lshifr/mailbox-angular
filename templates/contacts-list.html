@@ -1,16 +1,8 @@
-<style>
-    .m-over{
-        background: #f5f5f5;
-    }
-</style>
-
-
 <div class="row">
 
     <h1 style="margin-top: 50px; margin-bottom: 50px;text-align: center">
         <small>Current contacts</small>
     </h1>
-
 
     <div class="col-md-2"></div>
 
@@ -19,12 +11,12 @@
         <input class="form-control" type="text" placeholder="Find contact" style="width: 200px;">
         <table class="table">
             <thead>
-                <tr>
-                    <th style="width: 15%"></th>
-                    <th style="width: 40%"></th>
-                    <th style="width: 30%"></th>
-                    <th style="width: 15%"></th>
-                </tr>
+            <tr>
+                <th style="width: 15%"></th>
+                <th style="width: 40%"></th>
+                <th style="width: 30%"></th>
+                <th style="width: 15%"></th>
+            </tr>
             </thead>
             <tr
                     ng-repeat="contact in $ctrl.contacts"
@@ -63,8 +55,8 @@
                 </td>
             </tr>
         </table>
-
     </div>
+
     <div class="col-md-2"></div>
 
 </div>

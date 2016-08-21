@@ -12,7 +12,9 @@ mailbox.run(
 mailbox.config($stateProvider => {
     $stateProvider.state('home', {
             url: '/',
-            template: '<h2 class="welcome well">Welcome to the mailbox app!</h2>'
+            template: `<h2 class="welcome well">
+                            Welcome to the mailbox app! <br><br><small>Author: Leonid Shifrin</small>
+                       </h2>`
         }
     );
 
@@ -37,20 +39,35 @@ mailbox.config($stateProvider => {
     $stateProvider.state('contacts', {
         url: '/contacts',
         abstract: true,
-        template: '<ui-view/>'
-    });
-
-    $stateProvider.state('contacts.list',{
-        url: '',
+        template: '<ui-view/>',
         resolve:{
             users: function(httpFacade){
                 return httpFacade.getUsers()
             }
-        },
+        }
+
+    });
+
+    $stateProvider.state('contacts.list',{
+        url: '',
         controller: function($scope, users){
             $scope.users = users;
         },
-        template: '<contacts-list users="users"></contacts-list>'
+        template: '<contacts-list contacts="users"></contacts-list>'
+    });
+
+    $stateProvider.state('contacts.person', {
+        url: '/{contactId:[0-9]{1,4}}',
+        resolve: {
+            user: function($stateParams, users, mailboxUtils){
+                return mailboxUtils.findById(users, $stateParams.contactId)
+            }
+        },
+        controller: function($scope, user, mailboxUtils){
+            $scope.user = user;
+            $scope.userName = mailboxUtils.fullUserName;
+        },
+        template: '<user-info user="user"></user-info>'
     });
 
 });

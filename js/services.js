@@ -37,10 +37,8 @@ mailbox.service('httpFacade', function ($http, $q) {
 
     this.getMessages =
         () => _needRequest.messages ? _updateMessages() : _getCached(_messages);
-
-    //_updateMessages().then(()=>_updateUsers());
-
 });
+
 
 mailbox.service('mailboxUtils', function () {
     this.collectionIdHash = function (coll) {
@@ -52,5 +50,11 @@ mailbox.service('mailboxUtils', function () {
     this.fullUserName = user => user.firstName + '  ' + user.lastName;
 
     this.cutString = cutLength => msg => (msg.length <= cutLength) ? msg : msg.substring(0, cutLength) + '...';
-    
+
+    this.findById = function(a, id) {
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].id == id) return a[i];
+        }
+        return null;
+    }
 });

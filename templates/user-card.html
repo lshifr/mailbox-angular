@@ -1,35 +1,59 @@
-
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{$ctrl.fullName($ctrl.user)}}</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class=" col-md-9 col-lg-9 ">
-                    <table class="table table-user-information">
-                        <tbody>
-                        <tr>
-                            <user-avatar url="$ctrl.user.avatarUrl"></user-avatar>
-                        </tr>
-                        <tr>
-                            <td>Дата рождения</td>
-                            <td>{{$ctrl.user.birthDate}}</td>
-                        </tr>
-                        <tr>
-                            <td>Пол</td>
-                            <td>{{$ctrl.user.gender}}</td>
-                        </tr>
-                        <tr>
-                            <td>Адрес</td>
-                            <td>{{$ctrl.user.address}}</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td><a href="mailto:{{$ctrl.user.email}}">{{$ctrl.user.email}}</a></td>
-
-                        </tbody>
-                    </table>
+<div class="row" style="margin-top: 50px;">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">Данные пользователя</h3>
+            </div>
+            <div class="panel-body user-info">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img
+                                class="user-avatar-lrg img-circle usercard-img-center"
+                                ng-src="{{$ctrl.user.avatarUrl}}"
+                        >
+                    </div>
+                    <div class="col-md-8 col-lg-8 ">
+                        <table class="table table-user-information">
+                            <tbody>
+                            <tr>
+                                <td>Имя</td>
+                                <td>{{$ctrl.user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Фамилия</td>
+                                <td>{{$ctrl.user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Дата рождения</td>
+                                <td>{{$ctrl.user.birthDate}}</td>
+                            </tr>
+                            <tr>
+                                <td>Пол</td>
+                                <td>{{$ctrl.user.gender}}</td>
+                            </tr>
+                            <tr>
+                                <td>Адрес</td>
+                                <td>{{$ctrl.user.address}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td><a href="mailto:{{$ctrl.user.email}}">{{$ctrl.user.email}}</a></td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row userinfo-buttons">
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-success">Edit</button>
+                    </div>
+                    <div class="col-md-8"></div>
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-danger">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-md-2"></div>
+</div>
