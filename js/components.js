@@ -1,3 +1,19 @@
+mailbox.component('alert', {
+    bindings: {
+        topic : '@',
+        showAlert: '=' //Note the bi-directional binding here
+    },
+    templateUrl: 'templates/alert.html',
+    controller: function(){
+        this.closeAlert = function(){
+            this.showAlert = false;
+        }
+    },
+    transclude: true,
+    replace: true
+});
+
+
 mailbox.component('mailbox', {
     bindings: {
         messages: '<',
@@ -41,13 +57,12 @@ mailbox.component('messageControls', {
 });
 
 
-
 mailbox.component('testMsg', {
     template: '<td>{{$ctrl.message.text}}</td>',
     bindings: {
-        message:'<'
+        message: '<'
     },
-    controller: function(){
+    controller: function () {
 
     }
 });
@@ -70,12 +85,12 @@ mailbox.component('messages', {
 });
 
 
-mailbox.component('contactsList',{
+mailbox.component('contactsList', {
     templateUrl: 'templates/contacts-list.html',
     bindings: {
         contacts: '<'
     },
-    controller: function(httpFacade, mailboxUtils, navigator, $state){
+    controller: function (httpFacade, mailboxUtils, navigator, $state) {
         this.fullUserName = mailboxUtils.fullUserName;
         this.edit = navigator.editUser;
         this.state = $state.current.name;
@@ -89,23 +104,34 @@ mailbox.component('userInfo', {
         user: '<',
         origin: '<'
     },
-    controller: function(navigator, $state){
-        var  _backState = this.origin?this.origin:'contacts.list';
+    controller: function (navigator, $state) {
+        var _backState = this.origin ? this.origin : 'contacts.list';
         this.edit = navigator.editUser;
         this.state = $state.current.name;
         this.back = () => navigator.go(_backState);
-        this.backBtnName = this.origin?'Back':'Back to contacts';
+        this.backBtnName = this.origin ? 'Back' : 'Back to contacts';
     }
 });
 
 
-mailbox.component('editUserInfo',{
+mailbox.component('editUserInfo', {
     templateUrl: 'templates/edit-user-info.html',
     bindings: {
         user: '<',
         origin: '<'
     },
-    controller: function(navigator){
-        this.cancel = state => navigator.go(state?state:'contacts.list');
+    controller: function (navigator) {
+        var _self = this;
+        var _testError = true;
+        this.showAlert = false;
+        this.back = state => navigator.go(state ? state : 'contacts.list');
+        this.done = state => {
+            console.log(this.user);
+            if (_testError){
+                this.showAlert = true;
+            } else {
+                _self.back(state);
+            }
+        }
     }
 });

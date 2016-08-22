@@ -1,6 +1,15 @@
 <div class="row" style="margin-top: 50px;">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        <alert
+                topic="Something went wrong!"
+                show-alert="$ctrl.showAlert"
+                close-alert="$ctrl.closeAlert()"
+
+        >
+                <span>Server error</span>
+        </alert>
+
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title text-center">Редактирование контактных данных</h3>
@@ -70,11 +79,15 @@
 
                 <div class="row userinfo-buttons">
                     <div class="col-md-2">
-                        <button class="btn btn-xs btn-warning" ng-click="$ctrl.cancel($ctrl.origin)">Cancel</button>
+                        <button class="btn btn-xs btn-warning" ng-click="$ctrl.back($ctrl.origin)">
+                            Cancel
+                        </button>
                     </div>
                     <div class="col-md-8"></div>
                     <div class="col-md-2">
-                        <button class="btn btn-xs btn-info">Ok</button>
+                        <button class="btn btn-xs btn-info" ng-click="$ctrl.done($ctrl.origin)">
+                            Ok
+                        </button>
                     </div>
                 </div>
 
