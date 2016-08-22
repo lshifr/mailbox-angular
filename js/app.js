@@ -9,6 +9,52 @@ mailbox.run(
     ]
 );
 
+mailbox.config($httpProvider => {
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+
+    /**
+     * The workhorse; converts an object to x-www-form-urlencoded serialization.
+     * @param {Object} obj
+     * @return {String}
+     */
+    var param = function (obj) {
+        var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
+
+        for (name in obj) {
+            value = obj[name];
+
+            if (value instanceof Array) {
+                for (i = 0; i < value.length; ++i) {
+                    subValue = value[i];
+                    fullSubName = name + '[' + i + ']';
+                    innerObj = {};
+                    innerObj[fullSubName] = subValue;
+                    query += param(innerObj) + '&';
+                }
+            }
+            else if (value instanceof Object) {
+                for (subName in value) {
+                    subValue = value[subName];
+                    fullSubName = name + '[' + subName + ']';
+                    innerObj = {};
+                    innerObj[fullSubName] = subValue;
+                    query += param(innerObj) + '&';
+                }
+            }
+            else if (value !== undefined && value !== null)
+                query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+        }
+
+        return query.length ? query.substr(0, query.length - 1) : query;
+    };
+
+    // Override $http service's default transformRequest
+    $httpProvider.defaults.transformRequest = [function (data) {
+        return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+    }];
+
+});
+
 mailbox.config($stateProvider => {
 
     $stateProvider.state('home', {
@@ -19,15 +65,15 @@ mailbox.config($stateProvider => {
 
     $stateProvider.state('mailbox', {
             url: '/mailbox',
-            resolve:{
-                messages: function(httpFacade){
+            resolve: {
+                messages: function (httpFacade) {
                     return httpFacade.getMessages()
                 },
-                users: function(httpFacade){
+                users: function (httpFacade) {
                     return httpFacade.getUsers()
                 }
             },
-            controller: function($scope, messages, users){
+            controller: function ($scope, messages, users) {
                 $scope.messages = messages;
                 $scope.users = users;
             },
@@ -39,17 +85,17 @@ mailbox.config($stateProvider => {
         url: '/contacts',
         abstract: true,
         template: '<ui-view/>',
-        resolve:{
-            users: function(httpFacade){
+        resolve: {
+            users: function (httpFacade) {
                 return httpFacade.getUsers()
             }
         }
 
     });
 
-    $stateProvider.state('contacts.list',{
+    $stateProvider.state('contacts.list', {
         url: '',
-        controller: function($scope, users){
+        controller: function ($scope, users) {
             $scope.users = users;
         },
         template: '<contacts-list contacts="users"></contacts-list>'
@@ -61,14 +107,16 @@ mailbox.config($stateProvider => {
             origin: null
         },
         resolve: {
-            user: function($stateParams, users, mailboxUtils){
+            user: function ($stateParams, users, mailboxUtils) {
                 return mailboxUtils.findById(users, $stateParams.contactId)
             },
-            origin: function($stateParams){
+            origin: function ($stateParams) {
+                console.log('Resolving origin for contacts.person state:');
+                console.log($stateParams.origin);
                 return $stateParams.origin;
             }
         },
-        controller: function($scope, user, origin){
+        controller: function ($scope, user, origin) {
             $scope.user = user;
             $scope.origin = origin;
         },
@@ -80,16 +128,16 @@ mailbox.config($stateProvider => {
         params: {
             origin: null
         },
-        views:{
+        views: {
             /* We basically replace the content of the parent state view here */
-            '@contacts' : {
-                resolve:{
-                    origin: function($stateParams){
+            '@contacts': {
+                resolve: {
+                    origin: function ($stateParams) {
                         return $stateParams.origin;
                     }
                 },
-                controller: function($scope, user, origin){
-                    $scope.user =  angular.copy(user);
+                controller: function ($scope, user, origin) {
+                    $scope.user = angular.copy(user);
                     $scope.origin = origin;
                 },
                 template: '<edit-user-info user="user" origin="origin"></edit-user-info>'

@@ -13,7 +13,18 @@ mailbox.service('httpFacade', function ($http, $q) {
     };
 
     var _getUsers = () => $http.get(_url('users'));
+
     var _getMessages = () => $http.get(_url('messages'));
+
+    var _editUser = user => {
+        return $http({
+            method: "post",
+            url: _url(`user/${user.id}/edit`),
+            data: {
+                'user': JSON.stringify(user)
+            }
+        });
+    };
 
 
     var _updateUsers = () => {
@@ -37,6 +48,13 @@ mailbox.service('httpFacade', function ($http, $q) {
 
     this.getMessages =
         () => _needRequest.messages ? _updateMessages() : _getCached(_messages);
+
+    this.editUser = user => _editUser(user).then(
+        response => {
+            _needRequest.user = true;
+            return response;
+        }
+    )
 });
 
 

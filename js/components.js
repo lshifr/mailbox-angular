@@ -108,7 +108,9 @@ mailbox.component('userInfo', {
         var _backState = this.origin ? this.origin : 'contacts.list';
         this.edit = navigator.editUser;
         this.state = $state.current.name;
-        this.back = () => navigator.go(_backState);
+        this.back = () => {
+            navigator.go(_backState);
+        };
         this.backBtnName = this.origin ? 'Back' : 'Back to contacts';
     }
 });
@@ -120,18 +122,22 @@ mailbox.component('editUserInfo', {
         user: '<',
         origin: '<'
     },
-    controller: function (navigator) {
-        var _self = this;
-        var _testError = true;
+    controller: function (navigator, httpFacade) {
+        var self = this;
         this.showAlert = false;
-        this.back = state => navigator.go(state ? state : 'contacts.list');
+        this.back = state => {
+            navigator.go(state ? state : 'contacts.list', {origin: null});
+        };
         this.done = state => {
-            console.log(this.user);
-            if (_testError){
-                this.showAlert = true;
-            } else {
-                _self.back(state);
-            }
+            httpFacade.editUser(this.user)
+                .then(response => {
+                    self.back(state)
+                })
+                .catch(response => {
+                    this.showAlert = true;
+                    this.responseStatus = response.status;
+                    this.errorText = response.statusText;
+                });
         }
     }
 });
