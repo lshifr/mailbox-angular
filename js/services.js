@@ -58,3 +58,14 @@ mailbox.service('mailboxUtils', function () {
         return null;
     }
 });
+
+
+mailbox.service('navigator', function($state){
+    this.editUser = function(user, origin){
+        $state.go('contacts.person.edit', {contactId: user.id, origin: origin});
+    };
+
+    this.goToContacts = () => $state.go('contacts.list');
+
+    this.go = (state, params) => $state.go(state, params);
+});

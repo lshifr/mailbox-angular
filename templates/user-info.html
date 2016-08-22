@@ -44,12 +44,21 @@
                     </div>
                 </div>
                 <div class="row userinfo-buttons">
-                    <div class="col-md-2">
-                        <button class="btn btn-xs btn-success">Edit</button>
+                    <div class="col-md-3">
+                        <button class="btn btn-xs btn-info" ng-click="$ctrl.go($ctrl.contactsState)">
+                            Back to contacts
+                        </button>
                     </div>
-                    <div class="col-md-8"></div>
+                    <div class="col-md-5"></div>
                     <div class="col-md-2">
-                        <button class="btn btn-xs btn-danger">Delete</button>
+                        <button class="btn btn-xs btn-success" ng-click="$ctrl.edit($ctrl.user, $ctrl.state)">
+                            Edit
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-danger">
+                            Delete
+                        </button>
                     </div>
                 </div>
             </div>

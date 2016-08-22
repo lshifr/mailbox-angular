@@ -10,11 +10,10 @@ mailbox.run(
 );
 
 mailbox.config($stateProvider => {
+    
     $stateProvider.state('home', {
             url: '/',
-            template: `<h2 class="welcome well">
-                            Welcome to the mailbox app! <br><br><small>Author: Leonid Shifrin</small>
-                       </h2>`
+            templateUrl: 'templates/welcome.html'
         }
     );
 
@@ -65,9 +64,30 @@ mailbox.config($stateProvider => {
         },
         controller: function($scope, user, mailboxUtils){
             $scope.user = user;
-            $scope.userName = mailboxUtils.fullUserName;
         },
         template: '<user-info user="user"></user-info>'
+    });
+
+    $stateProvider.state('contacts.person.edit', {
+        url: '/edit',
+        params: {
+            origin: null
+        },
+        views:{
+            /* We basically replace the content of the parent state view here */
+            '@contacts' : {
+                resolve:{
+                    origin: function($stateParams){
+                        return $stateParams.origin;
+                    }
+                },
+                controller: function($scope, user, origin){
+                    $scope.user =  angular.copy(user);
+                    $scope.origin = origin;
+                },
+                template: '<edit-user-info user="user" origin="origin"></edit-user-info>'
+            }
+        }
     });
 
 });

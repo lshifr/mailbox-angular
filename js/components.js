@@ -1,8 +1,3 @@
-mailbox.component('main',{
-
-});
-
-
 mailbox.component('mailbox', {
     bindings: {
         messages: '<',
@@ -79,18 +74,35 @@ mailbox.component('contactsList',{
     bindings: {
         contacts: '<'
     },
-    controller: function(httpFacade, mailboxUtils){
+    controller: function(httpFacade, mailboxUtils, navigator, $state){
         this.fullUserName = mailboxUtils.fullUserName;
+        this.edit = navigator.editUser;
+        this.state = $state.current.name;
     }
 });
 
 
 mailbox.component('userInfo', {
-    templateUrl: 'templates/user-card.html',
+    templateUrl: 'templates/user-info.html',
     bindings: {
         user: '<'
     },
-    controller: function(mailboxUtils){
-        this.fullName = mailboxUtils.fullUserName;
+    controller: function(navigator, $state){
+        this.edit = navigator.editUser;
+        this.state = $state.current.name;
+        this.contactsState = 'contacts.list';
+        this.go = navigator.go;
+    }
+});
+
+
+mailbox.component('editUserInfo',{
+    templateUrl: 'templates/edit-user-info.html',
+    bindings: {
+        user: '<',
+        origin: '<'
+    },
+    controller: function(navigator){
+        this.cancel = state => navigator.go(state?state:'contacts.list');
     }
 });
