@@ -25,7 +25,7 @@
             <img class="img-circle user-avatar" data-ng-src="{{$ctrl.getMessageSender({message:message}).avatarUrl}}">
         </td>
         <td class="msg-inline-sender-name">
-            <a ui-sref="contacts.person({contactId: message.sender})">
+            <a ui-sref="contacts.person({contactId: message.sender, origin: $ctrl.state})">
                 <span>
                     {{$ctrl.fullUserName({user: $ctrl.getMessageSender({message:message})})}}
                 </span>

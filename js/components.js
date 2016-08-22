@@ -29,8 +29,8 @@ mailbox.component('userList', {
         users: "<",
         fullUserName: "&"
     },
-    controller: function () {
-
+    controller: function ($state) {
+        this.state = $state.current.name;
     }
 
 });
@@ -62,9 +62,10 @@ mailbox.component('messages', {
         fullUserName: '&'
 
     },
-    controller: function (mailboxUtils) {
+    controller: function (mailboxUtils, $state) {
         this._SHOWN_LENGTH = 150;
         this.briefContents = mailboxUtils.cutString(this._SHOWN_LENGTH);
+        this.state = $state.current.name;
     }
 });
 
@@ -85,13 +86,15 @@ mailbox.component('contactsList',{
 mailbox.component('userInfo', {
     templateUrl: 'templates/user-info.html',
     bindings: {
-        user: '<'
+        user: '<',
+        origin: '<'
     },
     controller: function(navigator, $state){
+        var  _backState = this.origin?this.origin:'contacts.list';
         this.edit = navigator.editUser;
         this.state = $state.current.name;
-        this.contactsState = 'contacts.list';
-        this.go = navigator.go;
+        this.back = () => navigator.go(_backState);
+        this.backBtnName = this.origin?'Back':'Back to contacts';
     }
 });
 

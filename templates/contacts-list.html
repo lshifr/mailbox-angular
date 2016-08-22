@@ -28,7 +28,9 @@
                     <img class="img-circle user-avatar pool-right-tiny" ng-src="{{contact.avatarUrl}}">
                 </td>
                 <td class="msg-inline-sender-name">
-                    <a ui-sref="contacts.person({contactId: contact.id})"><span>{{$ctrl.fullUserName(contact)}}</span></a>
+                    <a ui-sref="contacts.person({contactId: contact.id, origin: $ctrl.state})">
+                        <span>{{$ctrl.fullUserName(contact)}}</span>
+                    </a>
                 </td>
                 <td>
                     <span>

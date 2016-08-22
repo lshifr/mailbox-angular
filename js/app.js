@@ -10,7 +10,7 @@ mailbox.run(
 );
 
 mailbox.config($stateProvider => {
-    
+
     $stateProvider.state('home', {
             url: '/',
             templateUrl: 'templates/welcome.html'
@@ -57,15 +57,22 @@ mailbox.config($stateProvider => {
 
     $stateProvider.state('contacts.person', {
         url: '/{contactId:[0-9]{1,4}}',
+        params: {
+            origin: null
+        },
         resolve: {
             user: function($stateParams, users, mailboxUtils){
                 return mailboxUtils.findById(users, $stateParams.contactId)
+            },
+            origin: function($stateParams){
+                return $stateParams.origin;
             }
         },
-        controller: function($scope, user, mailboxUtils){
+        controller: function($scope, user, origin){
             $scope.user = user;
+            $scope.origin = origin;
         },
-        template: '<user-info user="user"></user-info>'
+        template: '<user-info user="user" origin="origin"></user-info>'
     });
 
     $stateProvider.state('contacts.person.edit', {
