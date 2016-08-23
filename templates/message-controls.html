@@ -1,6 +1,11 @@
 <div class="well well-sm msg-controls">
 
-    <input type="text"  class="form-control msg-search">
+    <input
+            type="text"
+            class="form-control msg-search"
+            ng-model="$ctrl.searchCriteria"
+            placeholder="Search by contents"
+    >
 
     <button class="btn btn-xs">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

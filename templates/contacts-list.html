@@ -1,6 +1,6 @@
 <div class="row">
 
-    <h1 style="margin-top: 50px; margin-bottom: 50px;text-align: center">
+    <h1 class="contacts-list-header">
         <small>Current contacts</small>
     </h1>
 
@@ -8,7 +8,12 @@
 
     <div class="col-md-8">
         <button class="btn btn-danger pull-right">Add contact</button>
-        <input class="form-control" type="text" placeholder="Find contact" style="width: 200px;">
+        <input
+                class="form-control contact-list-search"
+                type="text"
+                placeholder="Find contact"
+                ng-model="$ctrl.criteria"
+        >
         <table class="table">
             <thead>
             <tr>
@@ -19,7 +24,7 @@
             </tr>
             </thead>
             <tr
-                    ng-repeat="contact in $ctrl.contacts"
+                    ng-repeat="contact in $ctrl.contacts | filter : $ctrl.criteria"
                     ng-mouseover="mouseOver=true"
                     ng-mouseleave="mouseOver=false"
                     ng-class="{'m-over': mouseOver}"

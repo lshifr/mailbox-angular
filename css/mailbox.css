@@ -180,3 +180,13 @@ tr.single-message > td.msg-inline-sender-name{
     height: 25px;
     margin-right: 20px;
 }
+
+.contacts-list-header{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center
+}
+
+.contact-list-search{
+    width: 200px;
+}

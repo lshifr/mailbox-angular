@@ -18,13 +18,14 @@
         <!-- <ui-view></ui-view> -->
 
 
-        <message-controls></message-controls>
+        <message-controls search-criteria="$ctrl.messageSearchCriteria"></message-controls>
 
         <messages
                 users="$ctrl.users"
                 full-user-name="$ctrl.fullUserName(user)"
                 messages="$ctrl.messages"
                 get-message-sender="$ctrl.getMessageSender(message)"
+                search-criteria="$ctrl.messageSearchCriteria"
         >
 
         </messages>

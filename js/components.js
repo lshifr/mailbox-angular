@@ -22,6 +22,7 @@ mailbox.component('mailbox', {
     templateUrl: 'templates/mailbox.html',
     controller: function (httpFacade, mailboxUtils) {
         var _userHash = mailboxUtils.collectionIdHash(this.users);
+        this.messageSearchCriteria = '';
         this.fullUserName = mailboxUtils.fullUserName;
         this.getMessageSender = message => {
             return _userHash[message.sender];
@@ -53,7 +54,10 @@ mailbox.component('userList', {
 
 
 mailbox.component('messageControls', {
-    templateUrl: 'templates/message-controls.html'
+    templateUrl: 'templates/message-controls.html',
+    bindings: {
+        searchCriteria: '='
+    }
 });
 
 
@@ -74,7 +78,8 @@ mailbox.component('messages', {
         users: '<',
         messages: '<',
         getMessageSender: '&',
-        fullUserName: '&'
+        fullUserName: '&',
+        searchCriteria: '<'
 
     },
     controller: function (mailboxUtils, $state) {
