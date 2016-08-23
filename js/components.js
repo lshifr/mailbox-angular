@@ -123,15 +123,17 @@ mailbox.component('editUserInfo', {
         origin: '<'
     },
     controller: function (navigator, httpFacade) {
-        var self = this;
         this.showAlert = false;
-        this.back = state => {
-            navigator.go(state ? state : 'contacts.list', {origin: null});
+
+        this.back = (reload = false) => {
+            navigator.go(this.origin ? this.origin : 'contacts.list', {origin: null}, {reload: reload});
         };
-        this.done = state => {
+        
+        this.done = () => {
             httpFacade.editUser(this.user)
                 .then(response => {
-                    self.back(state)
+                    // Destination state reloading is essential here, to update the data in the ctrl/view
+                    this.back(true);
                 })
                 .catch(response => {
                     this.showAlert = true;

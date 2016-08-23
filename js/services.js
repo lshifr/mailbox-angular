@@ -26,7 +26,6 @@ mailbox.service('httpFacade', function ($http, $q) {
         });
     };
 
-
     var _updateUsers = () => {
         return _getUsers().then(response => {
             _users = response.data;
@@ -42,16 +41,16 @@ mailbox.service('httpFacade', function ($http, $q) {
             return _messages
         });
 
-
     this.getUsers =
-        () => _needRequest.users ? _updateUsers() : _getCached(_users);
+        () =>  _needRequest.users ? _updateUsers() : _getCached(_users);
+
 
     this.getMessages =
         () => _needRequest.messages ? _updateMessages() : _getCached(_messages);
 
     this.editUser = user => _editUser(user).then(
         response => {
-            _needRequest.user = true;
+            _needRequest.users = true;
             return response;
         }
     )
@@ -85,5 +84,5 @@ mailbox.service('navigator', function($state){
 
     this.goToContacts = () => $state.go('contacts.list');
 
-    this.go = (state, params) => $state.go(state, params);
+    this.go = (state, params, opts) => $state.go(state, params, opts); // A proxy to $state.go
 });

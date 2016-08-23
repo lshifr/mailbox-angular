@@ -1,5 +1,6 @@
 var mailbox = angular.module('mailbox', ['ui.router']);
 
+
 mailbox.run(
     ['$rootScope', '$state', '$stateParams',
         function ($rootScope, $state, $stateParams) {
@@ -8,6 +9,7 @@ mailbox.run(
         }
     ]
 );
+
 
 mailbox.config($httpProvider => {
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
@@ -52,8 +54,8 @@ mailbox.config($httpProvider => {
     $httpProvider.defaults.transformRequest = [function (data) {
         return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
     }];
-
 });
+
 
 mailbox.config($stateProvider => {
 
@@ -63,15 +65,12 @@ mailbox.config($stateProvider => {
         }
     );
 
+
     $stateProvider.state('mailbox', {
             url: '/mailbox',
             resolve: {
-                messages: function (httpFacade) {
-                    return httpFacade.getMessages()
-                },
-                users: function (httpFacade) {
-                    return httpFacade.getUsers()
-                }
+                messages: httpFacade => httpFacade.getMessages(),
+                users: httpFacade => httpFacade.getUsers()
             },
             controller: function ($scope, messages, users) {
                 $scope.messages = messages;
@@ -81,17 +80,14 @@ mailbox.config($stateProvider => {
         }
     );
 
+
     $stateProvider.state('contacts', {
         url: '/contacts',
         abstract: true,
         template: '<ui-view/>',
-        resolve: {
-            users: function (httpFacade) {
-                return httpFacade.getUsers()
-            }
-        }
-
+        resolve: { users: httpFacade => httpFacade.getUsers() }
     });
+
 
     $stateProvider.state('contacts.list', {
         url: '',
@@ -100,6 +96,7 @@ mailbox.config($stateProvider => {
         },
         template: '<contacts-list contacts="users"></contacts-list>'
     });
+
 
     $stateProvider.state('contacts.person', {
         url: '/{contactId:[0-9]{1,4}}',
@@ -110,11 +107,7 @@ mailbox.config($stateProvider => {
             user: function ($stateParams, users, mailboxUtils) {
                 return mailboxUtils.findById(users, $stateParams.contactId)
             },
-            origin: function ($stateParams) {
-                console.log('Resolving origin for contacts.person state:');
-                console.log($stateParams.origin);
-                return $stateParams.origin;
-            }
+            origin: $stateParams => $stateParams.origin
         },
         controller: function ($scope, user, origin) {
             $scope.user = user;
@@ -122,6 +115,7 @@ mailbox.config($stateProvider => {
         },
         template: '<user-info user="user" origin="origin"></user-info>'
     });
+
 
     $stateProvider.state('contacts.person.edit', {
         url: '/edit',
@@ -131,11 +125,10 @@ mailbox.config($stateProvider => {
         views: {
             /* We basically replace the content of the parent state view here */
             '@contacts': {
-                resolve: {
-                    origin: function ($stateParams) {
-                        return $stateParams.origin;
-                    }
-                },
+
+                /* Note: rely on parent state resolve for <origin> parameter here,
+                 * so we don't need explicit resolve in this state */
+
                 controller: function ($scope, user, origin) {
                     $scope.user = angular.copy(user);
                     $scope.origin = origin;
@@ -144,5 +137,4 @@ mailbox.config($stateProvider => {
             }
         }
     });
-
 });
