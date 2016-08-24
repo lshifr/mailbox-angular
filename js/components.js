@@ -14,6 +14,19 @@ mailbox.component('alert', {
 });
 
 
+mailbox.component('modalConfirm',{
+    templateUrl: 'templates/modal.html',
+    bindings:{
+        modalId: '@',
+        modalTitle: '@',
+        modalBody: '@',
+        cancelAction: '&',
+        confirmAction: '&',
+        okButtonStyle: '@'
+    }
+});
+
+
 mailbox.component('mailbox', {
     bindings: {
         messages: '<',
@@ -56,7 +69,7 @@ mailbox.component('userList', {
 mailbox.component('messageControls', {
     templateUrl: 'templates/message-controls.html',
     bindings: {
-        searchCriteria: '='
+        searchCriteria: '='  // Need this to pass the change to parent scope
     }
 });
 
@@ -99,6 +112,27 @@ mailbox.component('contactsList', {
         this.fullUserName = mailboxUtils.fullUserName;
         this.edit = navigator.editUser;
         this.state = $state.current.name;
+        this.confirmModal = user => {
+            this.contactToDelete = user;
+            $('#confirmDeleteUser').modal();
+        };
+        this.deleteUser = () => {
+            $('#confirmDeleteUser').removeClass('fade'); //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+            httpFacade.deleteContact(this.contactToDelete)
+                .then(response => {
+                    $state.reload();
+                })
+                .catch(response => {
+                    this.showAlert = true;
+                    this.responseStatus = response.status;
+                    this.errorText = response.statusText;
+                });
+
+        };
+        this.cancelDeleteUser = () => {
+            this.contactToDelete = undefined;
+        }
+
     }
 });
 
@@ -109,14 +143,32 @@ mailbox.component('userInfo', {
         user: '<',
         origin: '<'
     },
-    controller: function (navigator, $state) {
+    controller: function (navigator, $state, httpFacade) {
         var _backState = this.origin ? this.origin : 'contacts.list';
         this.edit = navigator.editUser;
         this.state = $state.current.name;
-        this.back = () => {
-            navigator.go(_backState);
+        this.back = (reload = false) => {
+            navigator.go(_backState,{}, { reload : reload });
         };
         this.backBtnName = this.origin ? 'Back' : 'Back to contacts';
+        this.confirmModal = () => {
+            $('#confirmDeleteUser').modal();
+        };
+        this.deleteUser = () => {
+            $('#confirmDeleteUser').removeClass('fade'); //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+            httpFacade.deleteContact(this.user)
+                .then(response => {
+                    /* Destination state reloading is essential here, to update the data in the ctrl/view */
+                    this.back(true);
+                })
+                .catch(response => {
+                    this.showAlert = true;
+                    this.responseStatus = response.status;
+                    this.errorText = response.statusText;
+                });
+
+        };
+        this.cancelDeleteUser = () => {};
     }
 });
 
@@ -137,7 +189,7 @@ mailbox.component('editUserInfo', {
         this.done = () => {
             httpFacade.editUser(this.user)
                 .then(response => {
-                    // Destination state reloading is essential here, to update the data in the ctrl/view
+                    /* Destination state reloading is essential here, to update the data in the ctrl/view  */
                     this.back(true);
                 })
                 .catch(response => {

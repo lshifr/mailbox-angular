@@ -26,6 +26,16 @@ mailbox.service('httpFacade', function ($http, $q) {
         });
     };
 
+    var _deleteContact = user => {
+        return $http({
+            method: "post",
+            url: _url(`user/${user.id}/delete`),
+            data: {
+                'user': JSON.stringify(user)
+            }
+        });
+    };
+
     var _updateUsers = () => {
         return _getUsers().then(response => {
             _users = response.data;
@@ -51,6 +61,14 @@ mailbox.service('httpFacade', function ($http, $q) {
     this.editUser = user => _editUser(user).then(
         response => {
             _needRequest.users = true;
+            return response;
+        }
+    );
+
+    this.deleteContact = user => _deleteContact(user).then(
+        response => {
+            _needRequest.users = true;
+            _needRequest.messages = true;
             return response;
         }
     )

@@ -24,6 +24,18 @@
     color: #959595;
 }
 
+
+/* Modal */
+
+.mailbox-modal{
+    margin-top: 200px;
+}
+
+.mailbox-modal-content{
+    width: 400px;
+    margin-left: 100px;
+}
+
 /* Mailbox view */
 
 .mailbox{
@@ -161,6 +173,10 @@ tr.single-message > td.msg-inline-sender-name{
 
 /* User info view */
 
+.user-page{
+    margin-top: 50px;
+}
+
 .usercard-img-center {
     margin-top: 30%;
     margin-left: 30%;
@@ -189,4 +205,9 @@ tr.single-message > td.msg-inline-sender-name{
 
 .contact-list-search{
     width: 200px;
+}
+
+.contact-inline-control{
+    cursor: pointer;
+    padding: 0 5px 0 5px;
 }
