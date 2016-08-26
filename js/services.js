@@ -3,7 +3,7 @@ mailbox.service('httpFacade', function ($http, $q) {
     var _url = path => _baseURL + path + '/';
     var _users;
     var _folders;
-    var _needRequest = {users: true,  folders: true};
+    var _needRequest = {users: true, folders: true};
 
 
     var _getCached = function (value) {
@@ -14,35 +14,39 @@ mailbox.service('httpFacade', function ($http, $q) {
 
     var _getUsers = () => $http.get(_url('users'));
 
-    var _getMessages = folderName => $http.get(_url('messages/'+folderName.toLowerCase()));
+    var _getMessages = folderName => $http.get(_url('messages/' + folderName.toLowerCase()));
 
     var _getFolders = () => $http.get(_url('folders'));
 
-    var _editUser = user => {
-        return $http({
-            method: "post",
-            url: _url(`user/${user.id}/edit`),
-            data: {
-                'user': JSON.stringify(user)
-            }
-        });
-    };
+    var _make_user_method = urlFun =>
+        user =>
+            $http({
+                method: "post",
+                url: urlFun(user),
+                data: {
+                    'user': JSON.stringify(user)
+                }
+            });
 
-    var _deleteContact = user => {
+    var _editUser = _make_user_method(user => _url(`user/${user.id}/edit`));
+
+    var _deleteContact = _make_user_method(user => _url(`user/${user.id}/delete`));
+
+    var _moveMessages = (messages, folderName) => {
         return $http({
             method: "post",
-            url: _url(`user/${user.id}/delete`),
+            url: _url(`messages/${folderName.toLowerCase()}/move`),
             data: {
-                'user': JSON.stringify(user)
+                'messageIds': JSON.stringify(messages.map(msg => msg.id))
             }
         });
     };
 
     var _updateUsers = () => _getUsers().then(response => {
-            _users = response.data;
-            _needRequest.users = false;
-            return _users;
-        });
+        _users = response.data;
+        _needRequest.users = false;
+        return _users;
+    });
 
     var _updateFolders = () => _getFolders().then(response => {
         _folders = response.data;
@@ -50,15 +54,15 @@ mailbox.service('httpFacade', function ($http, $q) {
         return _folders;
     });
 
-    this.getUsers =
-        () =>  _needRequest.users ? _updateUsers() : _getCached(_users);
+    this.getUsers = () =>
+        _needRequest.users ? _updateUsers() : _getCached(_users);
 
 
-    this.getMessages =
-        folderName => _getMessages(folderName).then(response => response.data);  //Don't cache messages
+    this.getMessages = folderName =>
+        _getMessages(folderName).then(response => response.data); //Don't cache messages
 
-    this.getFolders =
-        () => _needRequest.folders ? _updateFolders() : _getCached(_folders);
+    this.getFolders = () =>
+        _needRequest.folders ? _updateFolders() : _getCached(_folders);
 
     this.editUser = user => _editUser(user).then(
         response => {
@@ -70,10 +74,14 @@ mailbox.service('httpFacade', function ($http, $q) {
     this.deleteContact = user => _deleteContact(user).then(
         response => {
             _needRequest.users = true;
-            _needRequest.messages = true;
             return response;
         }
-    )
+    );
+
+    this.moveMessages = (messages, folderName) => _moveMessages(messages, folderName).then(
+        response => response.data
+    );
+
 });
 
 
@@ -88,17 +96,30 @@ mailbox.service('mailboxUtils', function () {
 
     this.cutString = cutLength => msg => (msg.length <= cutLength) ? msg : msg.substring(0, cutLength) + '...';
 
-    this.findById = function(a, id) {
+    this.findById = function (a, id) {
         for (var i = 0; i < a.length; i++) {
             if (a[i].id == id) return a[i];
         }
         return null;
+    };
+
+    this.getDestinationFolderList = (currentFolderName, allFolders) => {
+        var exclusions = {
+            'inbox': ['sent'],
+            'sent' : ['inbox']
+        };
+        var lequals = (fst, sec) => fst.toLowerCase() === sec.toLowerCase();
+        var lcontains = (folders, name) =>
+            folders.map(nm => nm.toLowerCase()).indexOf(name.toLowerCase()) !== -1;
+        return allFolders
+            .filter(folder => !lequals(folder.name, currentFolderName))
+            .filter(folder => !lcontains(exclusions[currentFolderName.toLowerCase()] || [], folder.name));
     }
 });
 
 
-mailbox.service('navigator', function($state){
-    this.editUser = function(user, origin){
+mailbox.service('navigator', function ($state) {
+    this.editUser = function (user, origin) {
         $state.go('contacts.person.edit', {contactId: user.id, origin: origin});
     };
 

@@ -35,12 +35,21 @@ mailbox.component('mailbox', {
         currentFolder: '<'
     },
     templateUrl: 'templates/mailbox.html',
-    controller: function (httpFacade, mailboxUtils) {
+    controller: function (httpFacade, mailboxUtils, $state) {
         var _userHash = mailboxUtils.collectionIdHash(this.users);
         this.messageSearchCriteria = '';
         this.fullUserName = mailboxUtils.fullUserName;
         this.getMessageSender = message => {
             return _userHash[message.sender];
+        };
+        this.selectedMessages = () => this.messages.filter( msg => msg.selected );
+        this.destinationFolders = mailboxUtils.getDestinationFolderList(
+            this.currentFolder, this.folders
+        );
+        this.moveSelected = folderName => {
+            httpFacade.moveMessages(this.selectedMessages(), folderName).then(() => {
+                $state.reload();
+            })
         };
     }
 });
@@ -54,8 +63,6 @@ mailbox.component('folderList', {
     },
     controller: function () {
         this.folderNames = this.folders.map(folder => folder.name);
-        console.log('Current folder in <folderList> component controller:');
-        console.log(this.currentFolder);
     }
 });
 
@@ -76,19 +83,11 @@ mailbox.component('userList', {
 mailbox.component('messageControls', {
     templateUrl: 'templates/message-controls.html',
     bindings: {
-        searchCriteria: '='  // Need this to pass the change to parent scope
-    }
-});
-
-
-mailbox.component('testMsg', {
-    template: '<td>{{$ctrl.message.text}}</td>',
-    bindings: {
-        message: '<'
+        searchCriteria: '=',  // Need this to pass the change to parent scope
+        destinationFolders: '<',
+        moveSelected: '&'
     },
-    controller: function () {
-
-    }
+    controller: function(){ }
 });
 
 

@@ -159,6 +159,14 @@ tr.single-message > td.msg-inline-controls {
     display: inline-block;
 }
 
+.msg-selected {
+    background-color: #FAFAD2;
+}
+
+.msg-selected-over {
+    background-color: #f3f3cb;
+}
+
 .msg-star{
     display: inline-block;
     margin-left: 10px;

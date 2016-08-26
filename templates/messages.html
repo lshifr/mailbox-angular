@@ -11,12 +11,20 @@
     <tr class="single-message"
         ng-mouseover="mouseOver=true"
         ng-mouseleave="mouseOver=false"
-        ng-class="{'m-over': mouseOver}"
+        ng-class="{
+            'm-over': mouseOver && !message.selected,
+            'msg-selected': message.selected,
+            'msg-selected-over': mouseOver && message.selected
+            }"
         ng-repeat="message in $ctrl.messages | filter: $ctrl.searchCriteria"
     >
         <td class="msg-inline-controls">
             <div>
-                <input type="checkbox" class="msg-select">
+                <input
+                        type="checkbox"
+                        class="msg-select"
+                        ng-model="message.selected"
+                >
                 <div class="msg-star">
                     <span
                             class="glyphicon glyphicon-star-empty msg-star-inner"

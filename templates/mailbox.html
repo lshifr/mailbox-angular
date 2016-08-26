@@ -18,7 +18,11 @@
         <!-- <ui-view></ui-view> -->
 
 
-        <message-controls search-criteria="$ctrl.messageSearchCriteria"></message-controls>
+        <message-controls
+                search-criteria="$ctrl.messageSearchCriteria"
+                destination-folders="$ctrl.destinationFolders"
+                move-selected="$ctrl.moveSelected(folderName)"
+        ></message-controls>
 
         <messages
                 users="$ctrl.users"

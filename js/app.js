@@ -76,10 +76,10 @@ mailbox.config($stateProvider => {
     $stateProvider.state('mailbox', {
             url: '/mailbox/{folder}',
             resolve: {
-                messages: (httpFacade, $stateParams) => httpFacade.getMessages($stateParams.folder),
+                currentFolder: $stateParams => $stateParams.folder || 'Inbox',
+                messages: (httpFacade, currentFolder) => httpFacade.getMessages(currentFolder),
                 users: httpFacade => httpFacade.getUsers(),
-                folders: httpFacade => httpFacade.getFolders(),
-                currentFolder: $stateParams => $stateParams.folder
+                folders: httpFacade => httpFacade.getFolders()
             },
             controller: function ($scope, messages, users, folders, currentFolder) {
                 $scope.messages = messages;
