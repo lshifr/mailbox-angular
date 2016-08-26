@@ -3,8 +3,18 @@
         <h5 class="text-center">Folders</h5>
     </div>
 
+    <div class="panel-body">
+        <ul class="folder-name-list">
+            <li class="folder-list-item" ng-repeat="folder in $ctrl.folderNames">
+                <a
+                        ui-sref="mailbox({folder: folder})"
+                        class="folder-name"
+                        ng-class="{'folder-active': $ctrl.currentFolder.toLowerCase() === folder.toLowerCase()}"
+                >
+                    {{folder}}
+                </a>
+            </li>
+        </ul>
 
-    <div class="list-group">
-        <a href="#" class="list-group-item" ng-repeat="folder in $ctrl.folderNames">{{folder}}</a>
     </div>
 </div>

@@ -57,6 +57,13 @@ mailbox.config($httpProvider => {
 });
 
 
+mailbox.config($urlRouterProvider => {
+    $urlRouterProvider
+        .when('/mailbox/', '/mailbox/inbox')
+        .otherwise('/');
+});
+
+
 mailbox.config($stateProvider => {
 
     $stateProvider.state('home', {
@@ -67,16 +74,25 @@ mailbox.config($stateProvider => {
 
 
     $stateProvider.state('mailbox', {
-            url: '/mailbox',
+            url: '/mailbox/{folder}',
             resolve: {
-                messages: httpFacade => httpFacade.getMessages(),
-                users: httpFacade => httpFacade.getUsers()
+                messages: (httpFacade, $stateParams) => httpFacade.getMessages($stateParams.folder),
+                users: httpFacade => httpFacade.getUsers(),
+                folders: httpFacade => httpFacade.getFolders(),
+                currentFolder: $stateParams => $stateParams.folder
             },
-            controller: function ($scope, messages, users) {
+            controller: function ($scope, messages, users, folders, currentFolder) {
                 $scope.messages = messages;
                 $scope.users = users;
+                $scope.folders = folders;
+                $scope.currentFolder = currentFolder;
             },
-            template: '<mailbox messages="messages" users="users"></mailbox>'
+            template: `<mailbox 
+                            messages="messages" 
+                            users="users" 
+                            folders="folders" 
+                            current-folder="currentFolder"
+                       ></mailbox>`
         }
     );
 

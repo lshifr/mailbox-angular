@@ -2,8 +2,8 @@ mailbox.service('httpFacade', function ($http, $q) {
     var _baseURL = "http://127.0.0.1:8000/";
     var _url = path => _baseURL + path + '/';
     var _users;
-    var _messages;
-    var _needRequest = {users: true, messages: true};
+    var _folders;
+    var _needRequest = {users: true,  folders: true};
 
 
     var _getCached = function (value) {
@@ -14,7 +14,9 @@ mailbox.service('httpFacade', function ($http, $q) {
 
     var _getUsers = () => $http.get(_url('users'));
 
-    var _getMessages = () => $http.get(_url('messages'));
+    var _getMessages = folderName => $http.get(_url('messages/'+folderName.toLowerCase()));
+
+    var _getFolders = () => $http.get(_url('folders'));
 
     var _editUser = user => {
         return $http({
@@ -36,27 +38,27 @@ mailbox.service('httpFacade', function ($http, $q) {
         });
     };
 
-    var _updateUsers = () => {
-        return _getUsers().then(response => {
+    var _updateUsers = () => _getUsers().then(response => {
             _users = response.data;
             _needRequest.users = false;
             return _users;
         });
-    };
 
-    var _updateMessages =
-        () => _getMessages().then(response => {
-            _messages = response.data;
-            _needRequest.messages = false;
-            return _messages
-        });
+    var _updateFolders = () => _getFolders().then(response => {
+        _folders = response.data;
+        _needRequest.folders = false;
+        return _folders;
+    });
 
     this.getUsers =
         () =>  _needRequest.users ? _updateUsers() : _getCached(_users);
 
 
     this.getMessages =
-        () => _needRequest.messages ? _updateMessages() : _getCached(_messages);
+        folderName => _getMessages(folderName).then(response => response.data);  //Don't cache messages
+
+    this.getFolders =
+        () => _needRequest.folders ? _updateFolders() : _getCached(_folders);
 
     this.editUser = user => _editUser(user).then(
         response => {

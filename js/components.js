@@ -30,7 +30,9 @@ mailbox.component('modalConfirm',{
 mailbox.component('mailbox', {
     bindings: {
         messages: '<',
-        users: '<'
+        users: '<',
+        folders: '<',
+        currentFolder: '<'
     },
     templateUrl: 'templates/mailbox.html',
     controller: function (httpFacade, mailboxUtils) {
@@ -46,9 +48,14 @@ mailbox.component('mailbox', {
 
 mailbox.component('folderList', {
     templateUrl: 'templates/folders.html',
-    bindings: {},
+    bindings: {
+        folders: '<',
+        currentFolder: '<'
+    },
     controller: function () {
-        this.folderNames = ['Inbox', 'Sent', 'Trash', 'Spam'];
+        this.folderNames = this.folders.map(folder => folder.name);
+        console.log('Current folder in <folderList> component controller:');
+        console.log(this.currentFolder);
     }
 });
 

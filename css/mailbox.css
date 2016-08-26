@@ -115,6 +115,23 @@
     margin-top:50px;
 }
 
+a.folder-name{
+    color:#337ab7;
+    font-size: 17px;;
+}
+
+.folder-active{
+    font-weight:bold;
+}
+
+.folder-name-list{
+    list-style: none;
+}
+
+.folder-list-item{
+    padding: 5px 0px 5px 20px;
+}
+
 
 /* Message grid */
 
