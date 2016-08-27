@@ -5,13 +5,18 @@
 
     <div class="panel-body">
         <ul class="folder-name-list">
-            <li class="folder-list-item" ng-repeat="folder in $ctrl.folderNames">
+            <li class="folder-list-item" ng-repeat="folder in $ctrl.folders">
                 <a
-                        ui-sref="mailbox({folder: folder})"
+                        ui-sref="mailbox({folder: folder.name})"
                         class="folder-name"
-                        ng-class="{'folder-active': $ctrl.currentFolder.toLowerCase() === folder.toLowerCase()}"
+                        ng-class="{'folder-active': $ctrl.currentFolder.toLowerCase() === folder.name.toLowerCase()}"
                 >
-                    {{folder}}
+                    <span class="folder-name">{{folder.name}}</span>
+
+                    <span class="folder-message-cnt">
+                        {{folder.messageCount}}
+                    </span>
+
                 </a>
             </li>
         </ul>

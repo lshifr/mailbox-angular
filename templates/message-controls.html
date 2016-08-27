@@ -7,7 +7,7 @@
             placeholder="Search by contents"
     >
 
-    <button class="btn btn-xs">
+    <button class="btn btn-xs" ng-click="$ctrl.moveSelected({folderName: 'Trash'})">
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
     </button>
 
@@ -28,6 +28,23 @@
                     {{folder.name}}
                 </a>
             </li>
+        </ul>
+    </div>
+
+    <div class="btn-group move-to-folder-btn">
+        <button
+                type="button"
+                class="btn btn-default btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+        >
+            More actions
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a style="cursor: pointer" ng-click="">Mark as read</a></li>
+            <li><a style="cursor: pointer" ng-click="">Mark as unread</a></li>
         </ul>
     </div>
 </div>

@@ -79,7 +79,10 @@ mailbox.service('httpFacade', function ($http, $q) {
     );
 
     this.moveMessages = (messages, folderName) => _moveMessages(messages, folderName).then(
-        response => response.data
+        response => {
+            _needRequest.folders = true;
+            return response.data;
+        }
     );
 
 });
@@ -114,7 +117,7 @@ mailbox.service('mailboxUtils', function () {
         return allFolders
             .filter(folder => !lequals(folder.name, currentFolderName))
             .filter(folder => !lcontains(exclusions[currentFolderName.toLowerCase()] || [], folder.name));
-    }
+    };
 });
 
 
