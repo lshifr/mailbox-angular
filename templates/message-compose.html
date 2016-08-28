@@ -1,32 +1,18 @@
-<!--
-<h3 class="text-center"
-    style="color: #959595;font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;"
-> Compose a message </h3>
--->
-
-
-<div class="row" style="margin-left: 0px;margin-top: 0px;">
+<div class="row msg-compose-container">
 
     <div class="well msg-controls"></div>
 
     <div class="msg-recipients">
         <div class="row">
             <div class="col-md-2">
-                <div class="well text-center" style="height: 150px; vertical-align: middle">
-                    <span style="line-height: 100px; font-size: 17px;">
+                <div class="well text-center msg-to">
+                    <span class="msg-to-text">
                         To
                     </span>
                 </div>
             </div>
             <div class="col-md-10">
-                <div style="
-                    height: 100px;
-                    overflow: scroll;
-                    margin-bottom: 15px;
-                    border: 1px solid rgba(0, 0, 0, .15);
-                    border-radius: 5px;
-                    "
-                >
+                <div class="msg-recipients-panel">
                     <table>
                         <tbody>
                         <tr ng-repeat="row in $ctrl.partitionedRecipients">
@@ -50,15 +36,10 @@
                             ng-model="$ctrl.recipientName"
                             placeholder="Enter recipient name (autocompletes, space for full contact list)"
                     >
-                    <div
-                            style="position: relative; display: inline-block; vertical-align: middle"
-                            ng-show="$ctrl.showSelectPanel"
-                    >
+                    <div class="user-select-panel-wrapper" ng-show="$ctrl.showSelectPanel">
                         <div class="user-select-panel">
-                            <div
-                                    style="float: right; font-size: 20px;color: darkred; margin-right: 20px;"
-                                    ng-click="$ctrl.refreshInput(true)"
-                            >x
+                            <div class="user-select-panel-close-btn" ng-click="$ctrl.refreshInput(true)">
+                                x
                             </div>
                             <div style="overflow: scroll">
                                 <table>
@@ -67,7 +48,6 @@
                                         <td ng-repeat="user in row">
                                             <user-panel-small
                                                     user="user"
-
                                                     show-remove-button="false"
                                                     on-click="$ctrl.addRecipient(user)"
                                             ></user-panel-small>
@@ -75,7 +55,6 @@
                                     </tr>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -109,6 +88,5 @@
             </div>
         </div>
     </div>
-
 
 </div>
