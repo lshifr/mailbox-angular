@@ -264,14 +264,30 @@ mailbox.component('messageCompose', {
             if (!mailboxUtils.findById(this.recipients, user.id)){
                 this.recipients.push(user);
                 this.recomputeRecipients();
+                this.recomputeContacts();
                 this.recipientName = '';
             }
         };
         this.removeRecipient = user => {
             this.recipients = this.recipients.filter(rec => rec.id !== user.id);
-            this.recomputeRecipients()
+            this.recomputeRecipients();
+            this.recomputeContacts();
         };
 
         this.recomputeContacts();
+    }
+});
+
+
+mailbox.component('userPanelSmall', {
+    templateUrl: 'templates/user-panel-small.html',
+    bindings: {
+        user: '<',
+        remove: '&',
+        showRemoveButton: '<',
+        onClick: '&'
+    },
+    controller: function(mailboxUtils){
+        this.fullUserName = mailboxUtils.fullUserName;
     }
 });

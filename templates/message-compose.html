@@ -31,28 +31,11 @@
                         <tbody>
                         <tr ng-repeat="row in $ctrl.partitionedRecipients">
                             <td ng-repeat="user in row">
-                                <div
-                                        style="display: block; padding: 10px;border-radius: 7px;"
-                                        ng-mouseover="mouseOver=true"
-                                        ng-mouseleave="mouseOver=false"
-                                        ng-class="{'m-over-drkr': mouseOver}"
-                                >
-                                    <div style="display: inline-block">
-                                        <img
-                                                class="img-circle user-avatar"
-                                                data-ng-src="{{user.avatarUrl}}"
-                                        >
-                                    </div>
-                                    <div style="display: inline-block; font-size: 10px;">
-                                        <span>{{$ctrl.fullUserName(user)}}</span>
-                                    </div>
-                                    <div class="del-wrap"
-                                         style="display: inline-block;float:right; padding-left: 5px;top:-10px;color: darkred; font-size: 15px;"
-                                         ng-click="$ctrl.removeRecipient(user)"
-                                    >
-                                        x
-                                    </div>
-                                </div>
+                                <user-panel-small
+                                        user="user"
+                                        remove="$ctrl.removeRecipient(user)"
+                                        show-remove-button="true"
+                                ></user-panel-small>
                             </td>
                         </tr>
                         </tbody>
@@ -60,13 +43,12 @@
 
                 </div>
                 <div>
-
                     <input
                             type="text"
                             class="form-control"
                             ng-keyup="$ctrl.onInputKeyUp($event)"
                             ng-model="$ctrl.recipientName"
-                            placeholder="Enter recipient name (autocompletes)"
+                            placeholder="Enter recipient name (autocompletes, space for full contact list)"
                     >
                     <div
                             style="position: relative; display: inline-block; vertical-align: middle"
@@ -83,23 +65,12 @@
                                     <tbody>
                                     <tr ng-repeat="row in $ctrl.partitionedContacts">
                                         <td ng-repeat="user in row">
-                                            <div
-                                                    style="display: block; padding: 10px;border-radius: 7px;"
-                                                    ng-mouseover="mouseOver=true"
-                                                    ng-mouseleave="mouseOver=false"
-                                                    ng-class="{'m-over-drkr': mouseOver}"
-                                                    ng-click="$ctrl.addRecipient(user)"
-                                            >
-                                                <div style="display: inline-block">
-                                                    <img
-                                                            class="img-circle user-avatar"
-                                                            data-ng-src="{{user.avatarUrl}}"
-                                                    >
-                                                </div>
-                                                <div style="display: inline-block; font-size: 10px;">
-                                                    <span>{{$ctrl.fullUserName(user)}}</span>
-                                                </div>
-                                            </div>
+                                            <user-panel-small
+                                                    user="user"
+
+                                                    show-remove-button="false"
+                                                    on-click="$ctrl.addRecipient(user)"
+                                            ></user-panel-small>
                                         </td>
                                     </tr>
                                     </tbody>
