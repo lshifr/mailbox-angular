@@ -11,6 +11,23 @@ mailbox.run(
 );
 
 
+/* This is used to redirect from 'mailbox' state. Could not make it abstract, because I
+* needed to set the default child state.
+*
+* Link: http://stackoverflow.com/a/29491412/565518
+*
+* */
+mailbox.run(function($rootScope, $state) {
+    $rootScope.$on('$stateChangeStart', function(evt, to, params) {
+        if (to.redirectTo) {
+            evt.preventDefault();
+            $state.go(to.redirectTo, params, {location: 'replace'});
+        }
+    });
+});
+
+
+
 mailbox.config($httpProvider => {
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
@@ -59,7 +76,7 @@ mailbox.config($httpProvider => {
 
 mailbox.config($urlRouterProvider => {
     $urlRouterProvider
-        .when('/mailbox/', '/mailbox/inbox')
+        .when('/mailbox/', '/mailbox/folder/inbox')
         .otherwise('/');
 });
 
@@ -74,27 +91,48 @@ mailbox.config($stateProvider => {
 
 
     $stateProvider.state('mailbox', {
-            url: '/mailbox/{folder}',
+            url: '/mailbox',
+            redirectTo: 'mailbox.folder',
             resolve: {
-                currentFolder: $stateParams => $stateParams.folder || 'Inbox',
-                messages: (httpFacade, currentFolder) => httpFacade.getMessages(currentFolder),
                 users: httpFacade => httpFacade.getUsers(),
                 folders: httpFacade => httpFacade.getFolders()
             },
-            controller: function ($scope, messages, users, folders, currentFolder) {
-                $scope.messages = messages;
+            controller: function ($scope, users, folders) {
                 $scope.users = users;
                 $scope.folders = folders;
-                $scope.currentFolder = currentFolder;
             },
-            template: `<mailbox 
-                            messages="messages" 
+            template: `<mailbox  
                             users="users" 
                             folders="folders" 
-                            current-folder="currentFolder"
                        ></mailbox>`
         }
     );
+
+
+    $stateProvider.state('mailbox.folder', {
+        url: '/folder/{folder}',
+        resolve: {
+            currentFolder: $stateParams => {
+                if (!$stateParams.folder){
+                    $stateParams.folder = 'Inbox';
+                }
+                return $stateParams.folder
+            },
+            messages: (httpFacade, currentFolder) => httpFacade.getMessages(currentFolder)
+        },
+        controller: function($scope, messages, currentFolder, users, folders){
+            $scope.currentFolder = currentFolder;
+            $scope.messages = messages;
+            $scope.users = users;
+            $scope.folders = folders;
+        }, 
+        template: `<mailbox-folder 
+                        messages="messages" 
+                        current-folder="currentFolder"
+                        users="users"
+                        folders="folders"
+                   ></mailbox-folder>`
+    });
 
 
     $stateProvider.state('contacts', {

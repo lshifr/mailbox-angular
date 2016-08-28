@@ -15,25 +15,7 @@
 
     <div class="col-md-9">
 
-        <!-- <ui-view></ui-view> -->
-
-
-        <message-controls
-                search-criteria="$ctrl.messageSearchCriteria"
-                destination-folders="$ctrl.destinationFolders"
-                move-selected="$ctrl.moveSelected(folderName)"
-        ></message-controls>
-
-        <messages
-                users="$ctrl.users"
-                full-user-name="$ctrl.fullUserName(user)"
-                messages="$ctrl.messages"
-                get-message-sender="$ctrl.getMessageSender(message)"
-                search-criteria="$ctrl.messageSearchCriteria"
-        >
-
-        </messages>
-
+        <ui-view></ui-view>
 
     </div>
 

@@ -117,7 +117,7 @@
 
 a.folder-name{
     color:#337ab7;
-    font-size: 17px;;
+    font-size: 17px;
 }
 
 .folder-active{
@@ -126,21 +126,25 @@ a.folder-name{
 
 .folder-name-list{
     list-style: none;
+    padding-left:0;
 }
 
 .folder-list-item{
-    padding: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 5px;
 }
 
 .folder-name{
-    margin-right: 10px;
+    margin-right: 0px;
 }
 
 .folder-message-cnt{
-    padding-left: 5px;
-    padding-right: 30px;
+    margin-left: 5px;
+    margin-right: 50px;
     float: right;
-    font-weight: lighter
+    font-weight: lighter;
+    color:#337ab7;
+    font-size: 17px;
+    text-align: center;
 }
 
 
@@ -224,6 +228,10 @@ tr.single-message > td.msg-inline-sender-name{
 
 .m-over {
     background: #f5f5f5;
+}
+
+.m-over-drkr {
+    background: #f0f0f0;
 }
 
 .edit-input{

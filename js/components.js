@@ -29,12 +29,24 @@ mailbox.component('modalConfirm',{
 
 mailbox.component('mailbox', {
     bindings: {
+        users: '<',
+        folders: '<'
+    },
+    templateUrl: 'templates/mailbox.html',
+    controller: function (httpFacade, mailboxUtils, $state) {
+        this.fullUserName = mailboxUtils.fullUserName;
+    }
+});
+
+
+mailbox.component('mailboxFolder', {
+    bindings: {
         messages: '<',
         users: '<',
         folders: '<',
         currentFolder: '<'
     },
-    templateUrl: 'templates/mailbox.html',
+    templateUrl: 'templates/mailbox-folder.html',
     controller: function (httpFacade, mailboxUtils, $state) {
         var _userHash = mailboxUtils.collectionIdHash(this.users);
         this.messageSearchCriteria = '';
@@ -205,4 +217,9 @@ mailbox.component('editUserInfo', {
                 });
         }
     }
+});
+
+
+mailbox.component('messageCompose', {
+    templateUrl: 'templates/message-compose.html'
 });
