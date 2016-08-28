@@ -78,6 +78,11 @@
     height: 30px;
 }
 
+.user-avatar-md {
+    width: 50px;
+    height: 50px;
+}
+
 .user-avatar-lrg {
     width: 100px;
     height:100px;
@@ -257,6 +262,9 @@ tr.single-message > td.msg-inline-sender-name{
 }
 
 
+/* Compose message */
+
+
 .msg-recipients > .row {
     display: -webkit-box;
     display: -webkit-flex;
@@ -330,4 +338,42 @@ tr.single-message > td.msg-inline-sender-name{
 
 .msg-textarea{
     border: 1px solid #e9e9e9;
+}
+
+
+/* View message */
+
+
+.msg-view-header-wrapper{
+    display: block;
+}
+
+.msg-view-header{
+    display: inline-block;
+    margin-left: 10%;
+    margin-right: 20px;
+}
+
+.msg-view-msginfo-wrapper{
+    display: inline-block;
+}
+
+.msg-view-user-avatar{
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.msg-view-usr-name{
+    display: inline-block;
+    font-size: 15px;
+    margin-right: 50px;
+}
+
+.msg-view-msg-date{
+    display: inline-block;
+}
+
+.msg-view-msg-text{
+    margin-top: 30px;
+    margin-bottom: 30px;
 }

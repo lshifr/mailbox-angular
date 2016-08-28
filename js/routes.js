@@ -117,6 +117,37 @@ mailbox.config($stateProvider => {
     });
 
 
+    $stateProvider.state('mailbox.messageview',{
+        url: '/view/{messageId}',
+        views: {
+            '':{
+                resolve: {
+                    message: (httpFacade, $stateParams)  => httpFacade.getMessage($stateParams.messageId)
+                },
+                controller: function($scope, message, users, folders, mailboxUtils){
+                    $scope.message = message;
+                    $scope.sender = mailboxUtils.findById(users, message.sender);
+                    $scope.recipient = mailboxUtils.findById(users, message.recipient);
+                    $scope.folder = mailboxUtils.findById(folders, message.folderId);
+                },
+                template: `<message-view 
+                                message="message" 
+                                sender="sender" 
+                                recipient="recipient" 
+                                folder="folder"
+                           ></message-view>`
+            },
+            'folders': {
+                controller: function ($scope, folders) {
+                    $scope.currentFolder = null; //Doesn't have a well-defined value here
+                    $scope.folders = folders;
+                },
+                template: `<folder-list folders="folders" current-folder="currentFolder"></folder-list>`
+            }
+        }
+    });
+
+
     $stateProvider.state('contacts', {
         url: '/contacts',
         abstract: true,

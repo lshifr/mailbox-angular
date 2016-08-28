@@ -16,6 +16,8 @@ mailbox.service('httpFacade', function ($http, $q) {
 
     var _getMessages = folderName => $http.get(_url('messages/' + folderName.toLowerCase()));
 
+    var _getMessage = messageId => $http.get(_url('message/' + messageId));
+
     var _getFolders = () => $http.get(_url('folders'));
 
     var _make_user_method = urlFun =>
@@ -68,12 +70,17 @@ mailbox.service('httpFacade', function ($http, $q) {
         return _folders;
     });
 
+
+    /* ==============================  PUBLIC INTERFACE ============================== */
+
     this.getUsers = () =>
         _needRequest.users ? _updateUsers() : _getCached(_users);
 
 
     this.getMessages = folderName =>
         _getMessages(folderName).then(response => response.data); //Don't cache messages
+
+    this.getMessage = messageId => _getMessage(messageId).then(response => response.data);
 
     this.getFolders = () =>
         _needRequest.folders ? _updateFolders() : _getCached(_folders);
@@ -147,7 +154,16 @@ mailbox.service('mailboxUtils', function () {
             return false;
         }
         return true;
-    }
+    };
+
+    this.formatDate = date => date.toLocaleTimeString("en-us", {
+        weekday: "long",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
 });
 
 

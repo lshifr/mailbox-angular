@@ -120,10 +120,33 @@ mailbox.component('messages', {
         searchCriteria: '<'
 
     },
-    controller: function (mailboxUtils, $state) {
+    controller: function (mailboxUtils, $state, navigator) {
         this._SHOWN_LENGTH = 150;
         this.briefContents = mailboxUtils.cutString(this._SHOWN_LENGTH);
         this.state = $state.current.name;
+        this.viewMessage = (message, event) => {
+            if(event.target.tagName ==='INPUT'){ // The case of a message selection checkbox
+                event.stopPropagation();
+            } else {
+                navigator.go('mailbox.messageview', {messageId: message.id});
+            }
+        }
+    }
+});
+
+
+mailbox.component('messageView',{
+    templateUrl: 'templates/message-view.html',
+    bindings: {
+        message: '<',
+        sender: '<',
+        recipient: '<',
+        folder: '<'
+    },
+    controller: function(mailboxUtils){
+        this.fullUserName = mailboxUtils.fullUserName;
+        this.formatDate = dateString => mailboxUtils.formatDate(new Date(dateString));
+        this.getPerson = () => (this.message.type === 'sent'? this.recipient: this.sender);
     }
 });
 

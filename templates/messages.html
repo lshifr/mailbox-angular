@@ -17,6 +17,7 @@
             'msg-selected-over': mouseOver && message.selected
             }"
         ng-repeat="message in $ctrl.messages | filter: $ctrl.searchCriteria"
+        ng-click="$ctrl.viewMessage(message, $event)"
     >
         <td class="msg-inline-controls">
             <div>
