@@ -42,14 +42,15 @@ mailbox.service('httpFacade', function ($http, $q) {
         });
     };
 
-    var _sendMessage = (text, recipients) => {
+    var _sendMessage = (text, recipients, sender) => {
         return $http({
             method: "post",
             url: _url('messages/send'),
             data: {
                 'messageInfo': JSON.stringify({
                     'text': text,
-                    'recipients': recipients.map( rec => rec.id)
+                    'recipients': recipients.map( rec => rec.id),
+                    'senderId': sender.id
                 })
             }
         });
@@ -98,7 +99,7 @@ mailbox.service('httpFacade', function ($http, $q) {
         }
     );
 
-    this.sendMessage = (text, recipients) => _sendMessage(text, recipients).then(
+    this.sendMessage = (text, recipients, sender) => _sendMessage(text, recipients, sender).then(
         response => {
             _needRequest.folders = true; //Message count changes
             return response.data;

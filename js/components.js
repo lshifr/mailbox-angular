@@ -55,8 +55,8 @@ mailbox.component('mailboxFolder', {
         this.getMessageRecipient = message => _userHash[message.recipient];
         this.getPerson = message =>
             (message.type === 'received')
-                ?this.getMessageSender(message)
-                :this.getMessageRecipient(message);
+                ? this.getMessageSender(message)
+                : this.getMessageRecipient(message);
         this.selectedMessages = () => this.messages.filter(msg => msg.selected);
         this.destinationFolders = mailboxUtils.getDestinationFolderList(
             this.currentFolder, this.folders
@@ -234,64 +234,100 @@ mailbox.component('messageCompose', {
         users: '<'
     },
     controller: function (generalUtils, mailboxUtils, httpFacade, navigator, $state) {
-        this.fullUserName = mailboxUtils.fullUserName;
         this.recipients = [];
-        this.partitionedRecipients = [];
-        this.recipientName = '';
+        this.senders = [];
         this.messageText = '';
-        this.recomputeContacts = () => {
-            this.contacts = this.users.filter(
-                contact => this.fullUserName(contact).toLowerCase().indexOf(this.recipientName.toLowerCase()) > -1
+
+        this.checkMessage = () => {
+            return this.messageText.trim().length > 0 && this.recipients.length > 0 && this.senders.length === 1;
+        };
+
+        this.sendMessage = () => {
+            httpFacade.sendMessage(this.messageText, this.recipients, this.senders[0])
+                .then(responseData => {
+                        navigator.go('mailbox.folder', {}, {reload: true});
+                    }
+                ).catch(response => {
+                    this.showAlert = true;
+                    this.responseStatus = response.status;
+                    this.errorText = response.statusText;
+                });
+        };
+    }
+});
+
+
+mailbox.component('userPicker',{
+    templateUrl: 'templates/user-picker.html',
+    bindings: {
+        users: '<',
+        picked: '=',
+        api: '=',
+        pickLimit: '<'
+    },
+    controller: function(mailboxUtils, generalUtils){
+        this.fullUserName = mailboxUtils.fullUserName;
+        this.partitionedPicked = [];
+        this.usersLocal = this.users;
+        this.partitionedUsers = [];
+        this.userName='';
+        this.showSelectPanel = false;
+        this.pickLimit = this.pickLimit || 10000;
+
+        this.recomputeUserPool = () => {
+            this.usersLocal = this.users.filter(
+                contact => this.fullUserName(contact).toLowerCase().indexOf(this.userName.toLowerCase()) > -1
             );
-            this.recipients.forEach(rec => {
-                this.contacts = this.contacts.filter(contact => contact.id !== rec.id);
+            this.picked.forEach(rec => {
+                this.usersLocal = this.usersLocal.filter(contact => contact.id !== rec.id);
             });
-            this.partitionedContacts = generalUtils.partition(this.contacts, 3, 3, true);
+            this.partitionedUsers = generalUtils.partition(this.usersLocal, 3, 3, true);
         };
 
         this.refreshInput = closePanel => {
-            this.recipientName = '';
+            this.userName = '';
             if (closePanel) {
                 this.showSelectPanel = false;
             }
         };
 
         this.onInputKeyUp = event => {
-            if (event.keyCode === 13 && this.contacts.length == 1) {
-                this.addRecipient(this.contacts[0]);
+            if (event.keyCode === 13 && this.usersLocal.length == 1) {
+                this.pickUser(this.usersLocal[0]);
                 this.refreshInput(true);
             } else {
                 this.showSelectPanel = true;
-                this.recomputeContacts();
+                this.recomputeUserPool();
             }
         };
 
-        this.recomputeRecipients = () => {
-            this.partitionedRecipients = generalUtils.partition(this.recipients, 3, 3, true);
+        this.recomputePicked = () => {
+            this.partitionedPicked = generalUtils.partition(this.picked, 3, 3, true);
         };
-        this.addRecipient = user => {
-            if (!mailboxUtils.findById(this.recipients, user.id)) {
-                this.recipients.push(user);
-                this.recomputeRecipients();
-                this.recomputeContacts();
-                this.recipientName = '';
-            }
-        };
-        this.removeRecipient = user => {
-            this.recipients = this.recipients.filter(rec => rec.id !== user.id);
-            this.recomputeRecipients();
-            this.recomputeContacts();
-        };
-
-        this.sendMessage = () => {
-            httpFacade.sendMessage(this.messageText, this.recipients).then(responseData => {
-                    navigator.go('mailbox.folder', {}, {reload: true});
+        this.pickUser = user => {
+            if (!mailboxUtils.findById(this.picked, user.id)) {
+                if(this.pickLimit <= this.picked.length){
+                    this.picked.pop();
                 }
-            );
+                this.picked.push(user);
+                this.recomputePicked();
+                this.recomputeUserPool();
+                this.userName = '';
+            }
+        };
+        this.removePicked = user => {
+            this.picked = this.picked.filter(rec => rec.id !== user.id);
+            this.recomputePicked();
+            this.recomputeUserPool();
         };
 
-        this.recomputeContacts();
+        this.api = {
+            refreshInput: this.refreshInput
+        };
+
+        this.recomputeUserPool();
     }
+
 });
 
 

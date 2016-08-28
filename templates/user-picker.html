@@ -1,0 +1,49 @@
+<div>
+    <div class="msg-recipients-panel">
+        <table>
+            <tbody>
+            <tr ng-repeat="row in $ctrl.partitionedPicked">
+                <td ng-repeat="user in row">
+                    <user-panel-small
+                            user="user"
+                            remove="$ctrl.removePicked(user)"
+                            show-remove-button="true"
+                    ></user-panel-small>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div>
+        <input
+                type="text"
+                class="form-control"
+                ng-keyup="$ctrl.onInputKeyUp($event)"
+                ng-model="$ctrl.userName"
+                placeholder="Enter user name (autocompletes, space for full list)"
+        >
+        <div class="user-select-panel-wrapper" ng-show="$ctrl.showSelectPanel">
+            <div class="user-select-panel">
+                <div class="user-select-panel-close-btn" ng-click="$ctrl.refreshInput(true)">
+                    x
+                </div>
+                <div style="overflow: scroll">
+                    <table>
+                        <tbody>
+                        <tr ng-repeat="row in $ctrl.partitionedUsers">
+                            <td ng-repeat="user in row">
+                                <user-panel-small
+                                        user="user"
+                                        show-remove-button="false"
+                                        on-click="$ctrl.pickUser(user)"
+                                ></user-panel-small>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

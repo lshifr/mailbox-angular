@@ -1,5 +1,13 @@
 <div class="row msg-compose-container">
 
+    <alert
+            topic="Something went wrong!"
+            show-alert="$ctrl.showAlert"
+            close-alert="$ctrl.closeAlert()"
+    >
+        <span>Server error. response status: <b>{{$ctrl.responseStatus}}</b> {{$ctrl.errorText}}</span>
+    </alert>
+
     <div class="well msg-controls"></div>
 
     <div class="msg-recipients">
@@ -12,53 +20,34 @@
                 </div>
             </div>
             <div class="col-md-10">
-                <div class="msg-recipients-panel">
-                    <table>
-                        <tbody>
-                        <tr ng-repeat="row in $ctrl.partitionedRecipients">
-                            <td ng-repeat="user in row">
-                                <user-panel-small
-                                        user="user"
-                                        remove="$ctrl.removeRecipient(user)"
-                                        show-remove-button="true"
-                                ></user-panel-small>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <user-picker
+                        users="$ctrl.users"
+                        picked="$ctrl.recipients"
+                        api="$ctrl.recipientPanelApi"
+                ></user-picker>
+            </div>
+        </div>
+    </div>
 
-                </div>
-                <div>
-                    <input
-                            type="text"
-                            class="form-control"
-                            ng-keyup="$ctrl.onInputKeyUp($event)"
-                            ng-model="$ctrl.recipientName"
-                            placeholder="Enter recipient name (autocompletes, space for full contact list)"
-                    >
-                    <div class="user-select-panel-wrapper" ng-show="$ctrl.showSelectPanel">
-                        <div class="user-select-panel">
-                            <div class="user-select-panel-close-btn" ng-click="$ctrl.refreshInput(true)">
-                                x
-                            </div>
-                            <div style="overflow: scroll">
-                                <table>
-                                    <tbody>
-                                    <tr ng-repeat="row in $ctrl.partitionedContacts">
-                                        <td ng-repeat="user in row">
-                                            <user-panel-small
-                                                    user="user"
-                                                    show-remove-button="false"
-                                                    on-click="$ctrl.addRecipient(user)"
-                                            ></user-panel-small>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+    <div class="msg-recipients">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="well text-center msg-to">
+                    <span style="font-size: 17px;">
+                        From
+                    </span>
+                    <div style="font-size: 10px; color: darkgray; margin-top: 10px;">
+                        For testing purposes, to be able to receive messages from others
                     </div>
                 </div>
+            </div>
+            <div class="col-md-10">
+                <user-picker
+                        users="$ctrl.users"
+                        picked="$ctrl.senders"
+                        api="$ctrl.senderPanelApi"
+                        pick-limit="1"
+                ></user-picker>
             </div>
         </div>
     </div>
@@ -73,7 +62,7 @@
                         class="form-control msg-textarea"
                         rows="10"
                         ng-model="$ctrl.messageText"
-                        ng-focus="$ctrl.refreshInput(true)"
+                        ng-focus="$ctrl.recipientPanelApi.refreshInput(true); $ctrl.senderPanelApi.refreshInput(true);"
                 ></textarea>
 
                 <div class="row userinfo-buttons">
@@ -85,7 +74,11 @@
                     </div>
                     <div class="col-md-5"></div>
                     <div class="col-md-3">
-                        <button class="btn btn-info" ng-click="$ctrl.sendMessage()">
+                        <button
+                                class="btn btn-info"
+                                ng-click="$ctrl.sendMessage()"
+                                ng-disabled="!$ctrl.checkMessage()"
+                        >
                             Send
                         </button>
                     </div>
