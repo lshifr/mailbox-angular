@@ -1,1 +1,143 @@
-<h2 class="text-center"> Compose a message </h2>
+<!--
+<h3 class="text-center"
+    style="color: #959595;font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;"
+> Compose a message </h3>
+-->
+
+
+<div class="row" style="margin-left: 0px;margin-top: 0px;">
+
+    <div class="well msg-controls"></div>
+
+    <div class="msg-recipients">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="well text-center" style="height: 150px; vertical-align: middle">
+                    <span style="line-height: 100px; font-size: 17px;">
+                        To
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div style="
+                    height: 100px;
+                    overflow: scroll;
+                    margin-bottom: 15px;
+                    border: 1px solid rgba(0, 0, 0, .15);
+                    border-radius: 5px;
+                    "
+                >
+                    <table>
+                        <tbody>
+                        <tr ng-repeat="row in $ctrl.partitionedRecipients">
+                            <td ng-repeat="user in row">
+                                <div
+                                        style="display: block; padding: 10px;border-radius: 7px;"
+                                        ng-mouseover="mouseOver=true"
+                                        ng-mouseleave="mouseOver=false"
+                                        ng-class="{'m-over-drkr': mouseOver}"
+                                >
+                                    <div style="display: inline-block">
+                                        <img
+                                                class="img-circle user-avatar"
+                                                data-ng-src="{{user.avatarUrl}}"
+                                        >
+                                    </div>
+                                    <div style="display: inline-block; font-size: 10px;">
+                                        <span>{{$ctrl.fullUserName(user)}}</span>
+                                    </div>
+                                    <div class="del-wrap"
+                                         style="display: inline-block;float:right; padding-left: 5px;top:-10px;color: darkred; font-size: 15px;"
+                                         ng-click="$ctrl.removeRecipient(user)"
+                                    >
+                                        x
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div>
+
+                    <input
+                            type="text"
+                            class="form-control"
+                            ng-keyup="$ctrl.onInputKeyUp($event)"
+                            ng-model="$ctrl.recipientName"
+                            placeholder="Enter recipient name (autocompletes)"
+                    >
+                    <div
+                            style="position: relative; display: inline-block; vertical-align: middle"
+                            ng-show="$ctrl.showSelectPanel"
+                    >
+                        <div class="user-select-panel">
+                            <div
+                                    style="float: right; font-size: 20px;color: darkred; margin-right: 20px;"
+                                    ng-click="$ctrl.refreshInput(true)"
+                            >x
+                            </div>
+                            <div style="overflow: scroll">
+                                <table>
+                                    <tbody>
+                                    <tr ng-repeat="row in $ctrl.partitionedContacts">
+                                        <td ng-repeat="user in row">
+                                            <div
+                                                    style="display: block; padding: 10px;border-radius: 7px;"
+                                                    ng-mouseover="mouseOver=true"
+                                                    ng-mouseleave="mouseOver=false"
+                                                    ng-class="{'m-over-drkr': mouseOver}"
+                                                    ng-click="$ctrl.addRecipient(user)"
+                                            >
+                                                <div style="display: inline-block">
+                                                    <img
+                                                            class="img-circle user-avatar"
+                                                            data-ng-src="{{user.avatarUrl}}"
+                                                    >
+                                                </div>
+                                                <div style="display: inline-block; font-size: 10px;">
+                                                    <span>{{$ctrl.fullUserName(user)}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="msg-text">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">Message text</h3>
+            </div>
+            <div class="panel-body">
+                <textarea class="form-control" rows="10"></textarea>
+
+                <div class="row userinfo-buttons">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <button class="btn btn-warning">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-3">
+                        <button class="btn btn-info">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

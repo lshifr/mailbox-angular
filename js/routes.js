@@ -97,6 +97,25 @@ mailbox.config($stateProvider => {
         }
     });
 
+    $stateProvider.state('mailbox.compose',{
+        url: '/compose',
+        views: {
+            '':{
+                controller: function($scope, users){
+                    $scope.users = users;
+                },
+                template: `<message-compose users="users"></message-compose>`
+            },
+            'folders': {
+                controller: function ($scope, folders) {
+                    $scope.currentFolder = null; //Doesn't have a well-defined value here
+                    $scope.folders = folders;
+                },
+                template: `<folder-list folders="folders" current-folder="currentFolder"></folder-list>`
+            }
+        }
+    });
+
 
     $stateProvider.state('contacts', {
         url: '/contacts',

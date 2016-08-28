@@ -221,5 +221,57 @@ mailbox.component('editUserInfo', {
 
 
 mailbox.component('messageCompose', {
-    templateUrl: 'templates/message-compose.html'
+    templateUrl: 'templates/message-compose.html',
+    bindings: {
+        users: '<'
+    },
+    controller: function(generalUtils, mailboxUtils){
+        this.fullUserName = mailboxUtils.fullUserName;
+        this.recipients = [];
+        this.partitionedRecipients = [];
+        this.recipientName='';
+        this.recomputeContacts = () => {
+            this.contacts = this.users.filter(
+                contact => this.fullUserName(contact).toLowerCase().indexOf(this.recipientName.toLowerCase()) > -1
+            );
+            this.recipients.forEach(rec => {
+                this.contacts = this.contacts.filter(contact => contact.id !== rec.id);
+            });
+            this.partitionedContacts = generalUtils.partition(this.contacts, 3, 3, true);
+        };
+
+        this.refreshInput = closePanel  => {
+            this.recipientName = '';
+            if(closePanel){
+                this.showSelectPanel=false;
+            }
+        };
+
+        this.onInputKeyUp = event => {
+            if(event.keyCode === 13 && this.contacts.length == 1){
+                this.addRecipient(this.contacts[0]);
+                this.refreshInput(true);
+            } else {
+                this.showSelectPanel = true;
+                this.recomputeContacts();
+            }
+        };
+
+        this.recomputeRecipients = () => {
+            this.partitionedRecipients = generalUtils.partition(this.recipients, 3, 3, true);
+        };
+        this.addRecipient = user => {
+            if (!mailboxUtils.findById(this.recipients, user.id)){
+                this.recipients.push(user);
+                this.recomputeRecipients();
+                this.recipientName = '';
+            }
+        };
+        this.removeRecipient = user => {
+            this.recipients = this.recipients.filter(rec => rec.id !== user.id);
+            this.recomputeRecipients()
+        };
+
+        this.recomputeContacts();
+    }
 });

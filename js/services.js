@@ -130,3 +130,21 @@ mailbox.service('navigator', function ($state) {
 
     this.go = (state, params, opts) => $state.go(state, params, opts); // A proxy to $state.go
 });
+
+
+mailbox.service('generalUtils', function(){
+    this.partition = function (lst, size, step, tail) {
+        if (step === undefined) {
+            step = size;
+        }
+        var plen = Math.floor((lst.length - size) / step) + 1;
+        var res = [];
+        for (var i = 0; i < plen; i++) {
+            res[i] = lst.slice(step * i, step * i + size)
+        }
+        if (tail && (plen * size < lst.length)) {
+            res.push(lst.slice(plen * size, lst.length))
+        }
+        return res
+    };
+});
