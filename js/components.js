@@ -1,11 +1,11 @@
 mailbox.component('alert', {
     bindings: {
-        topic : '@',
+        topic: '@',
         showAlert: '=' //Note the bi-directional binding here
     },
     templateUrl: 'templates/alert.html',
-    controller: function(){
-        this.closeAlert = function(){
+    controller: function () {
+        this.closeAlert = function () {
             this.showAlert = false;
         }
     },
@@ -14,9 +14,9 @@ mailbox.component('alert', {
 });
 
 
-mailbox.component('modalConfirm',{
+mailbox.component('modalConfirm', {
     templateUrl: 'templates/modal.html',
-    bindings:{
+    bindings: {
         modalId: '@',
         modalTitle: '@',
         modalBody: '@',
@@ -51,15 +51,21 @@ mailbox.component('mailboxFolder', {
         var _userHash = mailboxUtils.collectionIdHash(this.users);
         this.messageSearchCriteria = '';
         this.fullUserName = mailboxUtils.fullUserName;
-        this.getMessageSender = message => {
-            return _userHash[message.sender];
-        };
-        this.selectedMessages = () => this.messages.filter( msg => msg.selected );
+        this.getMessageSender = message => _userHash[message.sender];
+        this.getMessageRecipient = message => _userHash[message.recipient];
+        this.getPerson = message =>
+            (message.type === 'received')
+                ?this.getMessageSender(message)
+                :this.getMessageRecipient(message);
+        this.selectedMessages = () => this.messages.filter(msg => msg.selected);
         this.destinationFolders = mailboxUtils.getDestinationFolderList(
             this.currentFolder, this.folders
         );
         this.moveSelected = folderName => {
-            httpFacade.moveMessages(this.selectedMessages(), folderName).then(() => {
+            var messagesToMove = this.selectedMessages().filter(
+                msg => mailboxUtils.canMoveMessage(msg, folderName)
+            );
+            httpFacade.moveMessages(messagesToMove, folderName).then(() => {
                 $state.reload();
             })
         };
@@ -99,7 +105,8 @@ mailbox.component('messageControls', {
         destinationFolders: '<',
         moveSelected: '&'
     },
-    controller: function(){ }
+    controller: function () {
+    }
 });
 
 
@@ -108,7 +115,7 @@ mailbox.component('messages', {
     bindings: {
         users: '<',
         messages: '<',
-        getMessageSender: '&',
+        getPerson: '&',
         fullUserName: '&',
         searchCriteria: '<'
 
@@ -166,7 +173,7 @@ mailbox.component('userInfo', {
         this.edit = navigator.editUser;
         this.state = $state.current.name;
         this.back = (reload = false) => {
-            navigator.go(_backState,{}, { reload : reload });
+            navigator.go(_backState, {}, {reload: reload});
         };
         this.backBtnName = this.origin ? 'Back' : 'Back to contacts';
         this.confirmModal = () => {
@@ -186,7 +193,8 @@ mailbox.component('userInfo', {
                 });
 
         };
-        this.cancelDeleteUser = () => {};
+        this.cancelDeleteUser = () => {
+        };
     }
 });
 
@@ -203,7 +211,7 @@ mailbox.component('editUserInfo', {
         this.back = (reload = false) => {
             navigator.go(this.origin ? this.origin : 'contacts.list', {origin: null}, {reload: reload});
         };
-        
+
         this.done = () => {
             httpFacade.editUser(this.user)
                 .then(response => {
@@ -225,11 +233,12 @@ mailbox.component('messageCompose', {
     bindings: {
         users: '<'
     },
-    controller: function(generalUtils, mailboxUtils){
+    controller: function (generalUtils, mailboxUtils, httpFacade, navigator, $state) {
         this.fullUserName = mailboxUtils.fullUserName;
         this.recipients = [];
         this.partitionedRecipients = [];
-        this.recipientName='';
+        this.recipientName = '';
+        this.messageText = '';
         this.recomputeContacts = () => {
             this.contacts = this.users.filter(
                 contact => this.fullUserName(contact).toLowerCase().indexOf(this.recipientName.toLowerCase()) > -1
@@ -240,15 +249,15 @@ mailbox.component('messageCompose', {
             this.partitionedContacts = generalUtils.partition(this.contacts, 3, 3, true);
         };
 
-        this.refreshInput = closePanel  => {
+        this.refreshInput = closePanel => {
             this.recipientName = '';
-            if(closePanel){
-                this.showSelectPanel=false;
+            if (closePanel) {
+                this.showSelectPanel = false;
             }
         };
 
         this.onInputKeyUp = event => {
-            if(event.keyCode === 13 && this.contacts.length == 1){
+            if (event.keyCode === 13 && this.contacts.length == 1) {
                 this.addRecipient(this.contacts[0]);
                 this.refreshInput(true);
             } else {
@@ -261,7 +270,7 @@ mailbox.component('messageCompose', {
             this.partitionedRecipients = generalUtils.partition(this.recipients, 3, 3, true);
         };
         this.addRecipient = user => {
-            if (!mailboxUtils.findById(this.recipients, user.id)){
+            if (!mailboxUtils.findById(this.recipients, user.id)) {
                 this.recipients.push(user);
                 this.recomputeRecipients();
                 this.recomputeContacts();
@@ -272,6 +281,13 @@ mailbox.component('messageCompose', {
             this.recipients = this.recipients.filter(rec => rec.id !== user.id);
             this.recomputeRecipients();
             this.recomputeContacts();
+        };
+
+        this.sendMessage = () => {
+            httpFacade.sendMessage(this.messageText, this.recipients).then(responseData => {
+                    navigator.go('mailbox.folder', {}, {reload: true});
+                }
+            );
         };
 
         this.recomputeContacts();
@@ -287,7 +303,7 @@ mailbox.component('userPanelSmall', {
         showRemoveButton: '<',
         onClick: '&'
     },
-    controller: function(mailboxUtils){
+    controller: function (mailboxUtils) {
         this.fullUserName = mailboxUtils.fullUserName;
     }
 });

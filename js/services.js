@@ -42,6 +42,19 @@ mailbox.service('httpFacade', function ($http, $q) {
         });
     };
 
+    var _sendMessage = (text, recipients) => {
+        return $http({
+            method: "post",
+            url: _url('messages/send'),
+            data: {
+                'messageInfo': JSON.stringify({
+                    'text': text,
+                    'recipients': recipients.map( rec => rec.id)
+                })
+            }
+        });
+    };
+
     var _updateUsers = () => _getUsers().then(response => {
         _users = response.data;
         _needRequest.users = false;
@@ -85,6 +98,13 @@ mailbox.service('httpFacade', function ($http, $q) {
         }
     );
 
+    this.sendMessage = (text, recipients) => _sendMessage(text, recipients).then(
+        response => {
+            _needRequest.folders = true; //Message count changes
+            return response.data;
+        }
+    )
+
 });
 
 
@@ -118,6 +138,15 @@ mailbox.service('mailboxUtils', function () {
             .filter(folder => !lequals(folder.name, currentFolderName))
             .filter(folder => !lcontains(exclusions[currentFolderName.toLowerCase()] || [], folder.name));
     };
+
+    this.canMoveMessage = (message, destinationFolderName) => {
+        if(message.type === 'received' && destinationFolderName.toLowerCase() === 'sent'){
+            return false;
+        } else if(message.type === 'sent' && destinationFolderName.toLowerCase() === 'inbox'){
+            return false;
+        }
+        return true;
+    }
 });
 
 

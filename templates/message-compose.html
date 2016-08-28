@@ -69,18 +69,23 @@
                 <h3 class="panel-title text-center">Message text</h3>
             </div>
             <div class="panel-body">
-                <textarea class="form-control" rows="10"></textarea>
+                <textarea
+                        class="form-control msg-textarea"
+                        rows="10"
+                        ng-model="$ctrl.messageText"
+                        ng-focus="$ctrl.refreshInput(true)"
+                ></textarea>
 
                 <div class="row userinfo-buttons">
                     <div class="col-md-2"></div>
                     <div class="col-md-2">
-                        <button class="btn btn-warning">
+                        <a class="btn btn-warning" ui-sref="mailbox">
                             Cancel
-                        </button>
+                        </a>
                     </div>
                     <div class="col-md-5"></div>
                     <div class="col-md-3">
-                        <button class="btn btn-info">
+                        <button class="btn btn-info" ng-click="$ctrl.sendMessage()">
                             Send
                         </button>
                     </div>

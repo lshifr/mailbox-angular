@@ -155,7 +155,7 @@ th.msg-inline-controls{
 }
 
 th.msg-inline-avatar{
-    width: 7%;
+    width: 15%;
 }
 
 th.msg-inline-sender-name{
@@ -320,4 +320,14 @@ tr.single-message > td.msg-inline-sender-name{
 .msg-compose-container{
     margin-left: 0px;
     margin-top: 0px;
+}
+
+.msg-to-label{
+    font-size: 15px;
+    display: inline-block;
+    padding-right: 15px;
+}
+
+.msg-textarea{
+    border: 1px solid #e9e9e9;
 }

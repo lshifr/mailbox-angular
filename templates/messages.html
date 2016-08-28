@@ -35,15 +35,21 @@
             </div>
         </td>
         <td class="msg-inline-avatar">
-            <img
-                    class="img-circle user-avatar"
-                    data-ng-src="{{$ctrl.getMessageSender({message:message}).avatarUrl}}"
-            >
+            <div style="display: block; vertical-align: bottom">
+                <div ng-if="message.type === 'sent'" class="msg-to-label">
+                    To:
+                </div>
+                <img
+                        class="img-circle user-avatar"
+                        data-ng-src="{{$ctrl.getPerson({message:message}).avatarUrl}}"
+                        style="display: inline-block"
+                >
+            </div>
         </td>
         <td class="msg-inline-sender-name">
             <a ui-sref="contacts.person({contactId: message.sender, origin: $ctrl.state})">
                 <span>
-                    {{$ctrl.fullUserName({user: $ctrl.getMessageSender({message:message})})}}
+                    {{$ctrl.fullUserName({user: $ctrl.getPerson({message:message})})}}
                 </span>
             </a>
         </td>
