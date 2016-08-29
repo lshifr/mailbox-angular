@@ -1,5 +1,5 @@
-mailbox.service('httpFacade', function ($http, $q) {
-    var _baseURL = "http://127.0.0.1:8000/";
+mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
+    var _baseURL = mailboxConfig.testMode? mailboxConfig.baseTestURL: mailboxConfig.baseProductionURL;
     var _url = path => _baseURL + path + '/';
     var _users;
     var _folders;
