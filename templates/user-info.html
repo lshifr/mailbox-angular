@@ -1,0 +1,78 @@
+<div class="row user-page">
+
+    <modal-confirm
+            modal-id="confirmDeleteUser"
+            modal-title="Contact removal"
+            modal-body="Are you sure you want to delete this contact?"
+            cancel-action="$ctrl.cancelDeleteUser()"
+            confirm-action = "$ctrl.deleteUser()"
+            ok-button-style = "btn-danger"
+    ></modal-confirm>
+
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">Данные пользователя</h3>
+            </div>
+            <div class="panel-body user-info">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img
+                                class="user-avatar-lrg img-circle usercard-img-center"
+                                ng-src="{{$ctrl.user.avatarUrl}}"
+                        >
+                    </div>
+                    <div class="col-md-8 col-lg-8 ">
+                        <table class="table table-user-information">
+                            <tbody>
+                            <tr>
+                                <td>Имя</td>
+                                <td>{{$ctrl.user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Фамилия</td>
+                                <td>{{$ctrl.user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Дата рождения</td>
+                                <td>{{$ctrl.user.birthDate}}</td>
+                            </tr>
+                            <tr>
+                                <td>Пол</td>
+                                <td>{{$ctrl.user.gender}}</td>
+                            </tr>
+                            <tr>
+                                <td>Адрес</td>
+                                <td>{{$ctrl.user.address}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td><a href="mailto:{{$ctrl.user.email}}">{{$ctrl.user.email}}</a></td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row userinfo-buttons">
+                    <div class="col-md-3">
+                        <button class="btn btn-xs btn-info" ng-click="$ctrl.back()">
+                            {{$ctrl.backBtnName}}
+                        </button>
+                    </div>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-success" ng-click="$ctrl.edit($ctrl.user, $ctrl.state)">
+                            Edit
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-danger" ng-click="$ctrl.confirmModal()">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>

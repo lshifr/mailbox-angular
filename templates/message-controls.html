@@ -1,0 +1,51 @@
+<div class="well well-sm msg-controls">
+
+    <input
+            type="text"
+            class="form-control msg-search"
+            ng-model="$ctrl.searchCriteria"
+            placeholder="Search by contents"
+    >
+
+    <button class="btn btn-xs" ng-click="$ctrl.moveSelected({folderName: 'Trash'})">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </button>
+
+    <div class="btn-group move-to-folder-btn">
+        <button
+                type="button"
+                class="btn btn-default btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+        >
+            Move to
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="folder in $ctrl.destinationFolders">
+                <a style="cursor: pointer" ng-click="$ctrl.moveSelected({folderName: folder.name})">
+                    {{folder.name}}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="btn-group move-to-folder-btn">
+        <button
+                type="button"
+                class="btn btn-default btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+        >
+            More actions
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a style="cursor: pointer" ng-click="">Mark as read</a></li>
+            <li><a style="cursor: pointer" ng-click="">Mark as unread</a></li>
+        </ul>
+    </div>
+
+</div>

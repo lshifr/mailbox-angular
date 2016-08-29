@@ -1,0 +1,45 @@
+<div class="row msg-compose-container">
+
+    <div class="well well-sm msg-controls">
+        <a class="btn btn-sm btn-info" ui-sref="mailbox.folder({folder: $ctrl.folder.name})">
+            Back
+        </a>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="msg-view-header-wrapper">
+                <h3 class="panel-title text-center msg-view-header">
+                    Message
+                    <span style="margin-right: 10px;"></span>
+                    <span ng-if="$ctrl.message.type === 'received'">from</span>
+                    <span ng-if="$ctrl.message.type === 'sent'">to</span>
+                </h3>
+                <div class="msg-view-msginfo-wrapper">
+                    <div class="msg-view-user-avatar">
+                        <img
+                                class="img-circle user-avatar-md"
+                                data-ng-src="{{$ctrl.getPerson().avatarUrl}}"
+                        >
+                    </div>
+                    <div class="msg-view-usr-name">
+                        <span>
+                            <a ui-sref="contacts.person({contactId: $ctrl.sender.id})">
+                                {{$ctrl.fullUserName($ctrl.getPerson())}}
+                            </a>
+                        </span>
+                    </div>
+                    <div class="msg-view-msg-date">
+                        {{$ctrl.formatDate($ctrl.message.sent)}}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="msg-view-msg-text">
+                {{$ctrl.message.text}}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="panel panel-default folder-list">
+    <div class="panel-heading" style="display: block; text-align: center;">
+        <h5 style="display: inline-block">Folders</h5>
+        <button class="btn btn-xs" style="float:right; margin-left: 20px;display: inline-block; margin-top: 10px;">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <div class="panel-body">
+        <table class="folder-name-list">
+            <thead>
+            <tr>
+                <th style="width: 60%"></th>
+                <th style="width: 15%"></th>
+                <th style="width: 15%"></th>
+            </tr>
+            </thead>
+
+            <tr
+                    class="folder-list-item"
+                    ng-repeat="folder in $ctrl.folders"
+                    ng-mouseover="mouseOver=true"
+                    ng-mouseleave="mouseOver=false"
+                    ng-class="{'m-over-drkr': false}"
+
+            >
+
+                <td style="padding-top: 5px;padding-bottom: 5px;">
+                    <a
+                            ui-sref="mailbox.folder({folder: folder.name})"
+                            class="folder-name"
+                            ng-class="{'folder-active': $ctrl.currentFolder.toLowerCase() === folder.name.toLowerCase()}"
+                    >
+                        <span class="folder-name">{{folder.name}}</span>
+                    </a>
+                </td>
+
+                <td>
+                        <span
+                                class="folder-message-cnt"
+                                ng-class="{'folder-active': $ctrl.currentFolder.toLowerCase() === folder.name.toLowerCase()}"
+                        >
+                            {{folder.messageCount}}
+                        </span>
+                </td>
+
+                <td style="vertical-align: middle">
+                    <div ng-if="mouseOver">
+                        <span
+                                class="glyphicon glyphicon-trash"
+                                aria-hidden="true"
+                                title="Delete folder"
+                                style="cursor: pointer"
+                        ></span>
+                    </div>
+                </td>
+
+
+            </tr>
+        </table>
+
+    </div>
+</div>

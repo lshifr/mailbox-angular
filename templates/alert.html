@@ -1,0 +1,32 @@
+<style>
+    .alert-close-btn {
+
+        font-size: 20px;
+        color: darkred;
+        display: inline-block;
+        position: absolute;
+        right: 30px;
+        top: 10px;
+        cursor: pointer;
+    }
+
+    .alert-topic{
+        margin-right: 50px;
+        display: inline-block;
+    }
+
+    .alert-panel{
+        vertical-align: middle;
+        display: block;
+    }
+</style>
+
+<div class="alert alert-danger alert-panel" role="alert" ng-show="$ctrl.showAlert">
+    <div class="alert-close-btn" ng-click="$ctrl.closeAlert()">x</div>
+    <div class="alert-topic">
+        <span class="alert-topic-inner">
+            <b>{{$ctrl.topic}}</b>
+        </span>
+        <span class="alert-description" ng-transclude></span>
+    </div>
+</div>

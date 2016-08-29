@@ -1,0 +1,22 @@
+<div class="row border-between mailbox">
+
+    <div class="col-md-3">
+
+        <a ui-sref=".compose" class="btn btn-danger">Compose</a>
+
+        <div ui-view="folders"></div>
+
+        <user-list
+                users="$ctrl.users"
+                full-user-name="$ctrl.fullUserName(user)"
+        ></user-list>
+
+    </div>
+
+    <div class="col-md-9">
+
+        <ui-view></ui-view>
+
+    </div>
+
+</div>

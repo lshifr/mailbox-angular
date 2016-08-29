@@ -1,0 +1,25 @@
+<div
+        style="display: block; padding: 10px;border-radius: 7px;"
+        ng-mouseover="$ctrl.mouseOver=true"
+        ng-mouseleave="$ctrl.mouseOver=false"
+        ng-class="{'m-over-drkr': $ctrl.mouseOver}"
+        ng-click="$ctrl.onClick({user: $ctrl.user})"
+>
+    <div style="display: inline-block">
+        <img
+                class="img-circle user-avatar"
+                data-ng-src="{{$ctrl.user.avatarUrl}}"
+        >
+    </div>
+    <div style="display: inline-block; font-size: 10px;">
+        <span>{{$ctrl.fullUserName($ctrl.user)}}</span>
+    </div>
+    <div
+            ng-if="$ctrl.showRemoveButton"
+            class="del-wrap"
+            style="display: inline-block;float:right; padding-left: 5px;top:-10px;color: darkred; font-size: 15px;"
+            ng-click="$ctrl.remove({user: $ctrl.user})"
+    >
+        x
+    </div>
+</div>

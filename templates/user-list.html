@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h5 class="text-center">Contacts</h5>
+    </div>
+
+    <table style="" class="table borderless">
+        <tbody>
+        <tr ng-repeat="user in $ctrl.users">
+            <td>
+                <a ui-sref="contacts.person({contactId: user.id, origin: $ctrl.state})">
+                    {{$ctrl.fullUserName({user:user})}}
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

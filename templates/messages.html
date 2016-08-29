@@ -1,0 +1,64 @@
+<table class="table msg-table">
+    <thead>
+    <tr>
+        <th class="msg-inline-controls"></th>
+        <th class="msg-inline-avatar"></th>
+        <th class="msg-inline-sender-name"></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="single-message"
+        ng-mouseover="mouseOver=true"
+        ng-mouseleave="mouseOver=false"
+        ng-class="{
+            'm-over': mouseOver && !message.selected,
+            'msg-selected': message.selected,
+            'msg-selected-over': mouseOver && message.selected
+            }"
+        ng-repeat="message in $ctrl.messages | filter: $ctrl.searchCriteria"
+        ng-click="$ctrl.viewMessage(message, $event)"
+    >
+        <td class="msg-inline-controls">
+            <div>
+                <input
+                        type="checkbox"
+                        class="msg-select"
+                        ng-model="message.selected"
+                >
+                <div class="msg-star">
+                    <span
+                            class="glyphicon glyphicon-star-empty msg-star-inner"
+                            aria-hidden="true"
+                    >
+                    </span>
+                </div>
+            </div>
+        </td>
+        <td class="msg-inline-avatar">
+            <div style="display: block; vertical-align: bottom">
+                <div ng-if="message.type === 'sent'" class="msg-to-label">
+                    To:
+                </div>
+                <img
+                        class="img-circle user-avatar"
+                        data-ng-src="{{$ctrl.getPerson({message:message}).avatarUrl}}"
+                        style="display: inline-block"
+                >
+            </div>
+        </td>
+        <td class="msg-inline-sender-name">
+            <a ui-sref="contacts.person({contactId: message.sender, origin: $ctrl.state})">
+                <span>
+                    {{$ctrl.fullUserName({user: $ctrl.getPerson({message:message})})}}
+                </span>
+            </a>
+        </td>
+        <td class="msg-inline-brief-conts">
+            <span>
+                {{$ctrl.briefContents(message.text)}}
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,79 @@
+<div class="row">
+
+    <modal-confirm
+            modal-id="confirmDeleteUser"
+            modal-title="Contact removal"
+            modal-body="Are you sure you want to delete this contact?"
+            cancel-action="$ctrl.cancelDeleteUser()"
+            confirm-action = "$ctrl.deleteUser()"
+            ok-button-style = "btn-danger"
+    ></modal-confirm>
+
+
+    <h1 class="contacts-list-header">
+        <small>Current contacts</small>
+    </h1>
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8">
+        <button class="btn btn-danger pull-right">Add contact</button>
+        <input
+                class="form-control contact-list-search"
+                type="text"
+                placeholder="Find contact"
+                ng-model="$ctrl.criteria"
+        >
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width: 15%"></th>
+                <th style="width: 40%"></th>
+                <th style="width: 30%"></th>
+                <th style="width: 15%"></th>
+            </tr>
+            </thead>
+            <tr
+                    ng-repeat="contact in $ctrl.contacts | filter : $ctrl.criteria"
+                    ng-mouseover="mouseOver=true"
+                    ng-mouseleave="mouseOver=false"
+                    ng-class="{'m-over': mouseOver}"
+            >
+                <td class="msg-inline-avatar">
+                    <img class="img-circle user-avatar pool-right-tiny" ng-src="{{contact.avatarUrl}}">
+                </td>
+                <td class="msg-inline-sender-name">
+                    <a ui-sref="contacts.person({contactId: contact.id, origin: $ctrl.state})">
+                        <span>{{$ctrl.fullUserName(contact)}}</span>
+                    </a>
+                </td>
+                <td>
+                    <span>
+                        {{contact.email}}
+                    </span>
+                </td>
+                <td style="vertical-align: middle">
+                    <div ng-if="mouseOver">
+                        <span
+                                class="glyphicon glyphicon-trash contact-inline-control"
+                                aria-hidden="true"
+                                ng-click="$ctrl.confirmModal(contact)"
+                                title="Delete contact"
+                        ></span>
+
+                        <span
+                                class="glyphicon glyphicon-pencil contact-inline-control"
+                                aria-hidden="true"
+                                ng-click="$ctrl.edit(contact, $ctrl.state)"
+                                title="Edit contact"
+                        ></span>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-2"></div>
+
+</div>

@@ -1,0 +1,98 @@
+<div class="row user-page">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <alert
+                topic="Something went wrong!"
+                show-alert="$ctrl.showAlert"
+                close-alert="$ctrl.closeAlert()"
+
+        >
+                <span>Server error. response status: <b>{{$ctrl.responseStatus}}</b> {{$ctrl.errorText}}</span>
+        </alert>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">Редактирование контактных данных</h3>
+            </div>
+            <div class="panel-body user-info">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img
+                                class="user-avatar-lrg img-circle usercard-img-center"
+                                ng-src="{{$ctrl.user.avatarUrl}}"
+                        >
+                    </div>
+                    <div class="col-md-8 col-lg-8 ">
+                        <table class="table table-user-information">
+                            <tbody>
+                            <tr>
+                                <td>Имя</td>
+                                <td>
+                                    <input type="text" class="form-control edit-input" ng-model="$ctrl.user.firstName">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Фамилия</td>
+                                <td>
+                                    <input type="text" class="form-control edit-input" ng-model="$ctrl.user.lastName">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Дата рождения</td>
+                                <td>
+                                    <input type="text" class="form-control edit-input" ng-model="$ctrl.user.birthDate">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Пол</td>
+                                <td>
+                                    <select ng-model="$ctrl.user.gender">
+                                        <option value="male" ng-selected="$ctrl.user.gender === 'male'">Мужской</option>
+                                        <option value="female" ng-selected="$ctrl.user.gender === 'female'">Женский</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Адрес</td>
+                                <td>
+                                    <input type="text" class="form-control edit-input" ng-model="$ctrl.user.address">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>
+                                    <input type="text" class="form-control edit-input" ng-model="$ctrl.user.email">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Avatar URL</td>
+                                <td>
+                                    <input type="text" class="form-control edit-input" ng-model="$ctrl.user.avatarUrl">
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="row userinfo-buttons">
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-warning" ng-click="$ctrl.back()">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="col-md-8"></div>
+                    <div class="col-md-2">
+                        <button class="btn btn-xs btn-info" ng-click="$ctrl.done()">
+                            Ok
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>

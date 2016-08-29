@@ -1,0 +1,379 @@
+/* Make all Bootsrap columns in a row be equal height. We only restrict it to user-info class DOM descendants */
+
+.user-info > .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user-info > .row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Welcome page */
+
+.welcome{
+    margin-top: 150px;
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    padding: 50px 0 50px 0;
+    color: #959595;
+}
+
+
+/* Modal */
+
+.mailbox-modal{
+    margin-top: 200px;
+}
+
+.mailbox-modal-content{
+    width: 400px;
+    margin-left: 100px;
+}
+
+/* Mailbox view */
+
+.mailbox{
+    margin-top: 0px;
+}
+
+.border-between > [class*='col-']:before {
+    background: #e3e3e3;
+    bottom: 0;
+    content: " ";
+    left: 0;
+    position: absolute;
+    width: 1px;
+    top: 0;
+}
+
+.border-between > [class*='col-']:first-child:before {
+    display: none;
+}
+
+.borderless td, .borderless th {
+    border: none;
+}
+
+.borderless tr {
+    border-bottom: none;
+    border-top: none;
+}
+
+.borderless > tbody > tr > td, .borderless > tfoot > tr > td {
+    border: none;
+}
+
+.btn:focus, .btn:active {
+    outline: none !important;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+}
+
+.user-avatar-md {
+    width: 50px;
+    height: 50px;
+}
+
+.user-avatar-lrg {
+    width: 100px;
+    height:100px;
+}
+
+.pool-right-tiny{
+    margin-left: 5px;
+}
+
+
+/* Message controls */
+
+.move-to-folder-btn{
+    margin-left: 10px;
+}
+
+.msg-controls{
+    margin-bottom: 10px;
+    display: block;
+}
+
+.msg-search{
+    width: 200px;
+    display: inline-block;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 25px;
+    margin-right: 20px;
+}
+
+
+/* Folder list */
+
+.folder-list{
+    margin-top:50px;
+}
+
+a.folder-name{
+    color:#337ab7;
+    font-size: 17px;
+}
+
+.folder-active{
+    font-weight:bold;
+}
+
+.folder-name-list{
+    list-style: none;
+    padding-left:0;
+}
+
+.folder-list-item{
+    padding: 5px 0px 5px 5px;
+}
+
+.folder-name{
+    margin-right: 0px;
+}
+
+.folder-message-cnt{
+    margin-left: 5px;
+    margin-right: 50px;
+    float: right;
+    font-weight: lighter;
+    color:#337ab7;
+    font-size: 17px;
+    text-align: center;
+}
+
+
+/* Message grid */
+
+th.msg-inline-controls{
+    width: 10%;
+}
+
+th.msg-inline-avatar{
+    width: 15%;
+}
+
+th.msg-inline-sender-name{
+    width: 20%;
+}
+
+tr.single-message > td.msg-inline-controls {
+    vertical-align: middle;
+}
+
+.msg-inline-controls > div {
+    display: block;
+}
+
+.msg-select{
+    display: inline-block;
+}
+
+.msg-selected {
+    background-color: #FAFAD2;
+}
+
+.msg-selected-over {
+    background-color: #f3f3cb;
+}
+
+.msg-star{
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: bottom;
+}
+
+.msg-star-inner{
+    font-size: 1.2em;
+    top:3px;
+}
+
+td.msg-inline-avatar{
+    vertical-align: middle;
+}
+
+tr.single-message > td.msg-inline-sender-name{
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.msg-inline-brief-conts{
+    font-size: 10px;
+    text-align: justify;
+}
+
+.msg-table{
+    border-bottom: 1px solid #a0a0a0;
+}
+
+/* User info view */
+
+.user-page{
+    margin-top: 50px;
+}
+
+.usercard-img-center {
+    margin-top: 30%;
+    margin-left: 30%;
+}
+
+.userinfo-buttons{
+    margin-top: 20px;
+}
+
+.m-over {
+    background: #f5f5f5;
+}
+
+.m-over-drkr {
+    background: #f0f0f0;
+}
+
+.edit-input{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: 25px;
+    margin-right: 20px;
+}
+
+.contacts-list-header{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center
+}
+
+.contact-list-search{
+    width: 200px;
+}
+
+.contact-inline-control{
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+}
+
+
+/* Compose message */
+
+
+.msg-recipients > .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.msg-recipients > .row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-select-panel{
+    position: absolute;
+    top: 100%;
+    min-width: 500px;
+    min-height: 200px;
+    z-index: 1000;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+}
+
+.user-select-panel-wrapper{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.user-select-panel-close-btn{
+    float: right;
+    font-size: 20px;
+    color: darkred;
+    margin-right: 20px;
+}
+
+.msg-to{
+    height: 150px;
+    vertical-align: middle;
+}
+
+.msg-to-text{
+    line-height: 100px;
+    font-size: 17px;
+}
+
+.msg-recipients-panel{
+    height: 100px;
+    overflow: scroll;
+    margin-bottom: 15px;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 5px;
+}
+
+.msg-compose-container{
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+.msg-to-label{
+    font-size: 15px;
+    display: inline-block;
+    padding-right: 15px;
+}
+
+.msg-textarea{
+    border: 1px solid #e9e9e9;
+}
+
+
+/* View message */
+
+
+.msg-view-header-wrapper{
+    display: block;
+}
+
+.msg-view-header{
+    display: inline-block;
+    margin-left: 10%;
+    margin-right: 20px;
+}
+
+.msg-view-msginfo-wrapper{
+    display: inline-block;
+}
+
+.msg-view-user-avatar{
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.msg-view-usr-name{
+    display: inline-block;
+    font-size: 15px;
+    margin-right: 50px;
+}
+
+.msg-view-msg-date{
+    display: inline-block;
+}
+
+.msg-view-msg-text{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
