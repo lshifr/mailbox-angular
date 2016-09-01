@@ -342,7 +342,7 @@ mailbox.component('userAdd', {
 
         this.user = {};
 
-        this.done = () => {
+        this.submitForm = () => {
             httpFacade.addUser(this.user)
                 .then(response => {
                     /* Destination state reloading is essential here, to update the data in the ctrl/view  */
