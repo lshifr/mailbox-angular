@@ -251,6 +251,36 @@ mailbox.component('editUserInfo', {
 });
 
 
+mailbox.component('userAdd', {
+    templateUrl: 'templates/edit-user-info.html',
+    bindings: {
+        origin: '<'
+    },
+    controller: function (navigator, httpFacade) {
+        this.showAlert = false;
+
+        this.back = (reload = false) => {
+            navigator.go(this.origin ? this.origin : 'contacts.list', {origin: null}, {reload: reload});
+        };
+
+        this.user = {};
+
+        this.done = () => {
+            httpFacade.addUser(this.user)
+                .then(response => {
+                    /* Destination state reloading is essential here, to update the data in the ctrl/view  */
+                    this.back(true);
+                })
+                .catch(response => {
+                    this.showAlert = true;
+                    this.responseStatus = response.status;
+                    this.errorText = response.statusText;
+                });
+        }
+    }
+});
+
+
 mailbox.component('messageCompose', {
     templateUrl: 'templates/message-compose.html',
     bindings: {

@@ -34,6 +34,8 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
 
     var _deleteContact = _make_user_method(user => _url(`user/${user.id}/delete`));
 
+    var _addUser = _make_user_method(user => _url(`user/add`));
+
     var _moveMessages = (messages, folderName) => {
         return $http({
             method: "post",
@@ -70,6 +72,11 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
         return _folders;
     });
 
+    var _flushUsersCache = response => {
+        _needRequest.users = true;
+        return response;
+    };
+
 
     /* ==============================  PUBLIC INTERFACE ============================== */
 
@@ -85,19 +92,12 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
     this.getFolders = () =>
         _needRequest.folders ? _updateFolders() : _getCached(_folders);
 
-    this.editUser = user => _editUser(user).then(
-        response => {
-            _needRequest.users = true;
-            return response;
-        }
-    );
 
-    this.deleteContact = user => _deleteContact(user).then(
-        response => {
-            _needRequest.users = true;
-            return response;
-        }
-    );
+    this.editUser = user => _editUser(user).then(_flushUsersCache);
+
+    this.deleteContact = user => _deleteContact(user).then(_flushUsersCache);
+
+    this.addUser = user => _addUser(user).then(_flushUsersCache);
 
     this.moveMessages = (messages, folderName) => _moveMessages(messages, folderName).then(
         response => {
@@ -196,7 +196,58 @@ mailbox.service('generalUtils', function(){
 });
 
 
-mailbox.service('authService', function(){
+mailbox.service('cookies', function(){
+    function _setCookie(name, value, options) {
+        options = options || {};
+
+        var expires = options.expires;
+
+        if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires * 1000);
+            expires = options.expires = d;
+        }
+        if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+        }
+
+        value = encodeURIComponent(value);
+
+        var updatedCookie = name + "=" + value;
+
+        for (var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true) {
+                updatedCookie += "=" + propValue;
+            }
+        }
+
+        document.cookie = updatedCookie;
+    }
+
+    function _deleteCookie(name) {
+        _setCookie(name, "", {
+            expires: -1
+        })
+    }
+
+    function _getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    return {
+        getCookie: _getCookie,
+        setCookie: _setCookie,
+        deleteCookie: _deleteCookie
+    }
+});
+
+
+mailbox.service('authService', function(cookies, mailboxConfig){
     var _userIsAuthenticated = false;
 
     var _login = 'test';
@@ -205,6 +256,7 @@ mailbox.service('authService', function(){
     this.login = (login, password) => {
         if(login === _login && password === _password){
             _userIsAuthenticated = true;
+            cookies.setCookie('mailboxAuthenticated', 'true', { expires: mailboxConfig.sessionTimeout});
             return true;
         } else {
             return false;
@@ -213,7 +265,14 @@ mailbox.service('authService', function(){
 
     this.logout = () => {
         _userIsAuthenticated = false;
+        cookies.deleteCookie('mailboxAuthenticated');
     };
 
-    this.isLoggedIn = () => _userIsAuthenticated;
+    this.isLoggedIn = () => {
+        if(_userIsAuthenticated){
+            return true;
+        }
+        _userIsAuthenticated = (cookies.getCookie('mailboxAuthenticated')  === 'true');
+        return _userIsAuthenticated;
+    }
 });

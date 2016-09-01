@@ -33,7 +33,7 @@ mailbox.run(function($rootScope, navigator, authService){
         }
     });
 
-    $rootScope.logged=false;
+    $rootScope.logged=authService.isLoggedIn();
 
     $rootScope.logout = () => {
         authService.logout();
@@ -256,5 +256,20 @@ mailbox.config($stateProvider => {
                 template: '<edit-user-info user="user" origin="origin"></edit-user-info>'
             }
         }
+    });
+
+
+    $stateProvider.state('contacts.add', {
+        url: '/add',
+        params: {
+            origin: null
+        },
+        resolve: {
+            origin: $stateParams => $stateParams.origin
+        },
+        controller: function ($scope, origin) {
+            $scope.origin = origin;
+        },
+        template: '<user-add origin="origin"></user-add>'
     });
 });
