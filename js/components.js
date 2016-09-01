@@ -151,32 +151,49 @@ mailbox.component('messageView',{
 });
 
 
+mailbox.component('contactsAll',{
+    templateUrl: 'templates/contacts-all.html',
+    controller: function($state){
+        this.state = $state;
+    }
+});
+
+
 mailbox.component('contactsList', {
     templateUrl: 'templates/contacts-list.html',
     bindings: {
-        contacts: '<'
+        contacts: '<',
+        title: '@',
+        showAddButton: '<',
+        showDeleteButton:'<',
+        showActivateButton: '<'
     },
     controller: function (httpFacade, mailboxUtils, navigator, $state) {
+        var _processResponse = response => {
+            this.showAlert = true;
+            this.responseStatus = response.status;
+            this.errorText = response.statusText;
+        };
+        var _modal = () => $('#confirmDeleteUser').modal();
+        //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+        var _finishModal = () => $('#confirmDeleteUser').removeClass('fade');
         this.fullUserName = mailboxUtils.fullUserName;
         this.edit = navigator.editUser;
         this.state = $state.current.name;
         this.confirmModal = user => {
             this.contactToDelete = user;
-            $('#confirmDeleteUser').modal();
+            _modal();
         };
         this.deleteUser = () => {
-            $('#confirmDeleteUser').removeClass('fade'); //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+            _finishModal();
             httpFacade.deleteContact(this.contactToDelete)
-                .then(response => {
-                    $state.reload();
-                })
-                .catch(response => {
-                    this.showAlert = true;
-                    this.responseStatus = response.status;
-                    this.errorText = response.statusText;
-                });
-
+                .then(response => {$state.reload();})
+                .catch(_processResponse);
         };
+        this.recover = user =>  httpFacade.activateContact(user)
+            .then(response => { $state.reload();})
+            .catch(_processResponse);
+
         this.cancelDeleteUser = () => {
             this.contactToDelete = undefined;
         }
@@ -192,29 +209,30 @@ mailbox.component('userInfo', {
         origin: '<'
     },
     controller: function (navigator, $state, httpFacade) {
-        var _backState = this.origin ? this.origin : 'contacts.list';
+        var _backState = this.origin ? this.origin : 'contacts.list.current';
+        var _processResponse = response => {
+            this.showAlert = true;
+            this.responseStatus = response.status;
+            this.errorText = response.statusText;
+        };
+        var _modal = () => $('#confirmDeleteUser').modal();
+        //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+        var _finishModal = () => $('#confirmDeleteUser').removeClass('fade');
         this.edit = navigator.editUser;
         this.state = $state.current.name;
         this.back = (reload = false) => {
             navigator.go(_backState, {}, {reload: reload});
         };
         this.backBtnName = this.origin ? 'Back' : 'Back to contacts';
-        this.confirmModal = () => {
-            $('#confirmDeleteUser').modal();
-        };
+        this.confirmModal = () => {_modal()};
         this.deleteUser = () => {
-            $('#confirmDeleteUser').removeClass('fade'); //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+            _finishModal();
             httpFacade.deleteContact(this.user)
                 .then(response => {
                     /* Destination state reloading is essential here, to update the data in the ctrl/view */
                     this.back(true);
                 })
-                .catch(response => {
-                    this.showAlert = true;
-                    this.responseStatus = response.status;
-                    this.errorText = response.statusText;
-                });
-
+                .catch(_processResponse);
         };
         this.cancelDeleteUser = () => {
         };
@@ -232,7 +250,7 @@ mailbox.component('editUserInfo', {
         this.showAlert = false;
 
         this.back = (reload = false) => {
-            navigator.go(this.origin ? this.origin : 'contacts.list', {origin: null}, {reload: reload});
+            navigator.go(this.origin ? this.origin : 'contacts.list.current', {origin: null}, {reload: reload});
         };
 
         this.done = () => {
@@ -260,7 +278,7 @@ mailbox.component('userAdd', {
         this.showAlert = false;
 
         this.back = (reload = false) => {
-            navigator.go(this.origin ? this.origin : 'contacts.list', {origin: null}, {reload: reload});
+            navigator.go(this.origin ? this.origin : 'contacts.list.current', {origin: null}, {reload: reload});
         };
 
         this.user = {};

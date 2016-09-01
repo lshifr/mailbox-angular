@@ -5,19 +5,19 @@
             modal-title="Contact removal"
             modal-body="Are you sure you want to delete this contact?"
             cancel-action="$ctrl.cancelDeleteUser()"
-            confirm-action = "$ctrl.deleteUser()"
-            ok-button-style = "btn-danger"
+            confirm-action="$ctrl.deleteUser()"
+            ok-button-style="btn-danger"
     ></modal-confirm>
 
 
     <h1 class="contacts-list-header">
-        <small>Current contacts</small>
+        <small>{{$ctrl.title}}</small>
     </h1>
 
     <div class="col-md-2"></div>
 
     <div class="col-md-8">
-        <a class="btn btn-danger pull-right" ui-sref="contacts.add">
+        <a class="btn btn-danger pull-right" ui-sref="contacts.add" ng-show="$ctrl.showAddButton">
             Add contact
         </a>
         <input
@@ -61,6 +61,15 @@
                                 aria-hidden="true"
                                 ng-click="$ctrl.confirmModal(contact)"
                                 title="Delete contact"
+                                ng-show="$ctrl.showDeleteButton"
+                        ></span>
+
+                        <span
+                                class="glyphicon glyphicon-share-alt contact-inline-control"
+                                aria-hidden="true"
+                                ng-click="$ctrl.recover(contact)"
+                                title="Activate contact"
+                                ng-show="$ctrl.showActivateButton"
                         ></span>
 
                         <span

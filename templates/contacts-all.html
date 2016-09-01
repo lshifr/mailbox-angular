@@ -1,0 +1,22 @@
+<div class="row">
+
+    <ul class="nav nav-tabs">
+        <li role="presentation" ui-sref-active="active">
+            <a ui-sref="contacts.list.current">Current contacts</a>
+        </li>
+        <li role="presentation" ui-sref-active="active">
+            <a ui-sref="contacts.list.former">Former contacts</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content ">
+        <div class="tab-pane" ng-class="{active: $ctrl.state.$current.name === 'contacts.list.current'}" id="1">
+            <ui-view name="current"></ui-view>
+        </div>
+        <div class="tab-pane" ng-class="{active: $ctrl.state.$current.name === 'contacts.list.former'}" id="2">
+            <ui-view name="former"></ui-view>
+        </div>
+    </div>
+
+</div>

@@ -79,6 +79,7 @@ mailbox.config($stateProvider => {
         }
 
     });
+    
 
     $stateProvider.state('mailbox', {
             url: '/mailbox',
@@ -147,6 +148,7 @@ mailbox.config($stateProvider => {
         }
     });
 
+
     $stateProvider.state('mailbox.compose', {
         url: '/compose',
         views: {
@@ -204,17 +206,60 @@ mailbox.config($stateProvider => {
         template: '<ui-view/>',
         data: {
             requireLogin: true
-        },
-        resolve: {users: httpFacade => httpFacade.getUsers()}
+        }
     });
 
 
     $stateProvider.state('contacts.list', {
         url: '',
-        controller: function ($scope, users) {
-            $scope.users = users;
+        abstract: true,
+        template: '<contacts-all></contacts-all>'
+    });
+
+
+    $stateProvider.state('contacts.list.current', {
+        url: '',
+        resolve: {
+            users: httpFacade => httpFacade.getUsers()
         },
-        template: '<contacts-list contacts="users"></contacts-list>'
+        views: {
+            'current':{
+                controller: function ($scope, users) {
+                    $scope.users = users;
+                },
+                template:
+                    `<contacts-list 
+                        contacts="users" 
+                        title="Current contacts"
+                        show-add-button="true"
+                        show-delete-button="true"
+                        show-activate-button="false"
+                     ></contacts-list>`
+            }
+        }
+
+    });
+
+    $stateProvider.state('contacts.list.former', {
+        url: '/former',
+        views: {
+            'former':{
+                resolve:{
+                    users: httpFacade => httpFacade.getDeletedUsers()
+                },
+                controller: function ($scope, users) {
+                    $scope.users = users;
+                },
+                template:
+                    `<contacts-list 
+                        contacts="users" 
+                        title="Former contacts"
+                        show-add-button="false"
+                        show-delete-button="false"
+                        show-activate-button="true"
+                     ></contacts-list>`
+            }
+        }
     });
 
 
@@ -224,9 +269,7 @@ mailbox.config($stateProvider => {
             origin: null
         },
         resolve: {
-            user: function ($stateParams, users, mailboxUtils) {
-                return mailboxUtils.findById(users, $stateParams.contactId)
-            },
+            user: ($stateParams, httpFacade) => httpFacade.getUser($stateParams.contactId),
             origin: $stateParams => $stateParams.origin
         },
         controller: function ($scope, user, origin) {

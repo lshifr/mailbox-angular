@@ -14,6 +14,10 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
 
     var _getUsers = () => $http.get(_url('users'));
 
+    var _getUser = userId => $http.get(_url('user/'+userId));
+
+    var _getDeletedUsers = () => $http.get(_url('users/deleted'));
+
     var _getMessages = folderName => $http.get(_url('messages/' + folderName.toLowerCase()));
 
     var _getMessage = messageId => $http.get(_url('message/' + messageId));
@@ -33,6 +37,8 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
     var _editUser = _make_user_method(user => _url(`user/${user.id}/edit`));
 
     var _deleteContact = _make_user_method(user => _url(`user/${user.id}/delete`));
+
+    var _activateContact = _make_user_method(user => _url(`user/${user.id}/activate`));
 
     var _addUser = _make_user_method(user => _url(`user/add`));
 
@@ -83,6 +89,12 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
     this.getUsers = () =>
         _needRequest.users ? _updateUsers() : _getCached(_users);
 
+    this.getUser = userId => _getUser(userId).then(response => response.data);
+
+    this.getDeletedUsers = () => _getDeletedUsers().then(response => response.data);
+
+
+
 
     this.getMessages = folderName =>
         _getMessages(folderName).then(response => response.data); //Don't cache messages
@@ -96,6 +108,8 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
     this.editUser = user => _editUser(user).then(_flushUsersCache);
 
     this.deleteContact = user => _deleteContact(user).then(_flushUsersCache);
+
+    this.activateContact = user => _activateContact(user).then(_flushUsersCache);
 
     this.addUser = user => _addUser(user).then(_flushUsersCache);
 
@@ -172,7 +186,7 @@ mailbox.service('navigator', function ($state) {
         $state.go('contacts.person.edit', {contactId: user.id, origin: origin});
     };
 
-    this.goToContacts = () => $state.go('contacts.list');
+    this.goToContacts = () => $state.go('contacts.list.current');
 
     this.go = (state, params, opts) => $state.go(state, params, opts); // A proxy to $state.go
 });

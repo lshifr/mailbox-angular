@@ -31,8 +31,8 @@
             <li ng-class="{active: $state.includes('mailbox')}">
                 <a ui-sref="mailbox">Messages</a>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="contacts.list">Contacts</a>
+            <li ng-class="{active: $state.includes('contacts')}">
+                <a ui-sref="contacts.list.current">Contacts</a>
             </li>
         </ul>
 
