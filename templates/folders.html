@@ -1,7 +1,33 @@
+<modal-input
+        modal-id="newFolderPopup"
+        modal-title="Create a new folder"
+        cancel-action="$ctrl.cancelAddFolder()"
+        confirm-action="$ctrl.addFolder()"
+        ok-button-style="btn-info"
+        input="$ctrl.folderName"
+        body-text="Name the new folder"
+        error="$ctrl.folderNameError"
+></modal-input>
+
+<modal-confirm
+        modal-id="cannotDeleteFolder"
+        modal-title="Can't delete folder"
+        modal-body="This folder can't be deleted. Either it has some messages in it, or is one of the permanent folders"
+        cancel-action="null"
+        confirm-action="$ctrl.conformNoDelete()"
+        ok-button-style="btn-danger"
+        show-cancel-button="false"
+>
+</modal-confirm>
+
 <div class="panel panel-default folder-list">
     <div class="panel-heading" style="display: block; text-align: center;">
         <h5 style="display: inline-block">Folders</h5>
-        <button class="btn btn-xs" style="float:right; margin-left: 20px;display: inline-block; margin-top: 10px;">
+        <button
+                class="btn btn-xs"
+                style="float:right; margin-left: 20px;display: inline-block; margin-top: 10px;"
+                ng-click="$ctrl.createNewFolder()"
+        >
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
     </div>
@@ -45,7 +71,7 @@
                 </td>
 
                 <td style="vertical-align: middle">
-                    <div ng-if="mouseOver">
+                    <div ng-if="mouseOver" ng-click="$ctrl.deleteFolder(folder)">
                         <span
                                 class="glyphicon glyphicon-trash"
                                 aria-hidden="true"

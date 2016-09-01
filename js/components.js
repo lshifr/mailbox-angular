@@ -15,14 +15,29 @@ mailbox.component('alert', {
 
 
 mailbox.component('modalConfirm', {
-    templateUrl: 'templates/modal.html',
+    templateUrl: 'templates/modal-confirm.html',
     bindings: {
         modalId: '@',
         modalTitle: '@',
         modalBody: '@',
         cancelAction: '&',
         confirmAction: '&',
-        okButtonStyle: '@'
+        okButtonStyle: '@',
+        showCancelButton: '<'
+    }
+});
+
+mailbox.component('modalInput', {
+    templateUrl: 'templates/modal-input.html',
+    bindings: {
+        modalId: '@',
+        modalTitle: '@',
+        cancelAction: '&',
+        confirmAction: '&',
+        okButtonStyle: '@',
+        bodyText: '@',
+        input: '=',
+        error: '<'
     }
 });
 
@@ -79,8 +94,51 @@ mailbox.component('folderList', {
         folders: '<',
         currentFolder: '<'
     },
-    controller: function () {
+    controller: function (httpFacade, $state) {
+        var _modal = () => $('#newFolderPopup').modal();
+        //Need to do this manually due to a bug in Bootstrap modals: http://stackoverflow.com/a/22101894
+        var _finishModal = () => {
+            $('#newFolderPopup').modal('hide').fadeOut('slow');
+            //$('#newFolderPopup').removeClass('fade');
+        };
         this.folderNames = this.folders.map(folder => folder.name);
+        this.folderName="";
+        this.folderNameError = '';
+        this.cancelAddFolder = () => { this.folderName=""; };
+        this.addFolder = () => {
+            if(!this.folderName){
+                this.folderNameError = "Folder name can't be empty";
+            } else if(this.folderNames.map(fname => fname.toLowerCase()).indexOf(this.folderName.toLowerCase()) > -1 ){
+                this.folderNameError = "Folder with this name already exists";
+            } else{
+                _finishModal();
+                httpFacade.createFolder(this.folderName)
+                    .then(response => {
+                        $state.reload();
+                    });
+                //TODO: add catch
+            }
+        };
+        this.createNewFolder = () => {
+            _modal();
+        };
+
+        this.deleteFolder = folder => {
+            var fname = folder.name;
+            if(['inbox', 'sent', 'trash', 'spam'].indexOf(fname.toLowerCase()) > -1){
+                $('#cannotDeleteFolder').modal();
+            } else {
+                httpFacade.getMessages(fname).then(messages => {
+                    if(messages.length > 0 ){
+                        $('#cannotDeleteFolder').modal();
+                    } else {
+                        httpFacade.deleteFolder(fname).then(
+                            response => { $state.reload(); }
+                        )
+                    }
+                })
+            }
+        }
     }
 });
 

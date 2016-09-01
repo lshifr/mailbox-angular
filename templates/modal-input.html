@@ -6,8 +6,14 @@
 
                 <h4 class="modal-title text-center">{{$ctrl.modalTitle}}</h4>
             </div>
+            <div style="font-size: 15px" class="text-center">
+                {{$ctrl.bodyText}}
+            </div>
             <div class="modal-body text-center">
-                {{$ctrl.modalBody}}
+                <input type="text" class="form-control" ng-model="$ctrl.input">
+            </div>
+            <div ng-show="$ctrl.error !== ''" style="color: darkred" class="text-center">
+                {{$ctrl.error}}
             </div>
             <div class="modal-footer pull-center">
                 <button
@@ -16,11 +22,10 @@
                         class="btn"
                         ng-click="$ctrl.cancelAction()"
                 >
-                    Отмена
+                    Cancel
                 </button>
 
                 <button
-                        data-dismiss="modal"
                         class="btn {{$ctrl.okButtonStyle}}"
                         ng-click="$ctrl.confirmAction()"
                 >

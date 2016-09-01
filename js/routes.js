@@ -79,7 +79,7 @@ mailbox.config($stateProvider => {
         }
 
     });
-    
+
 
     $stateProvider.state('mailbox', {
             url: '/mailbox',

@@ -24,6 +24,10 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
 
     var _getFolders = () => $http.get(_url('folders'));
 
+    var _createFolder = fname => $http.post(_url('folder/create/'+fname));
+
+    var _deleteFolder = fname => $http.post(_url('folder/delete/'+fname));
+
     var _make_user_method = urlFun =>
         user =>
             $http({
@@ -125,7 +129,15 @@ mailbox.service('httpFacade', function ($http, $q, mailboxConfig) {
             _needRequest.folders = true; //Message count changes
             return response.data;
         }
-    )
+    );
+
+    this.createFolder = fname => _createFolder(fname).then(
+        response => { _needRequest.folders = true; return response;}
+    );
+
+    this.deleteFolder = fname => _deleteFolder(fname).then(
+        response => { _needRequest.folders = true; return response;}
+    );
 
 });
 
@@ -264,8 +276,8 @@ mailbox.service('cookies', function(){
 mailbox.service('authService', function(cookies, mailboxConfig){
     var _userIsAuthenticated = false;
 
-    var _login = 'test';
-    var _password = 'test';
+    var _login = mailboxConfig.login;
+    var _password = mailboxConfig.password;
 
     this.login = (login, password) => {
         if(login === _login && password === _password){
