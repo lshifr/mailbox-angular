@@ -28,17 +28,26 @@
         </div>
 
         <ul class="nav navbar-nav">
-            <li ng-class="{active: $state.includes('mailbox')}"><a ui-sref="mailbox">Messages</a></li>
-            <li ui-sref-active="active"><a ui-sref="contacts.list">Contacts</a></li>
+            <li ng-class="{active: $state.includes('mailbox')}">
+                <a ui-sref="mailbox">Messages</a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="contacts.list">Contacts</a>
+            </li>
         </ul>
+
+        <ul class="nav nav-pills pull-right">
+            <li class="dropdown" ng-show="logged">
+                <a class="btn btn-info login-btn" ng-click="logout()">Logout</a>
+            </li>
+        </ul>
+
     </div>
 </div>
-
 
 <div class="container">
 
     <ui-view></ui-view>
-
 
 </div>
 

@@ -1,0 +1,23 @@
+<div style="margin-left: 40%; margin-top: 100px;">
+    <form class="form" id="login-form" name="loginForm" ng-submit="submit()">
+        <!-- <label>Login</label> -->
+
+        <input
+                type="text"
+                placeholder="Username"
+                class="form-control login"
+                ng-model="username"
+        >
+
+        <input
+                type="password"
+                placeholder="Password"
+                class="form-control login"
+                ng-model="password"
+        >
+
+        <div class="login-err-msg" ng-show="badCredentials">Invalid user credentials</div>
+
+        <button type="submit" id="btnLogin" class="btn">Login</button>
+    </form>
+</div>

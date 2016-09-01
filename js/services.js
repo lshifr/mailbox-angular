@@ -194,3 +194,26 @@ mailbox.service('generalUtils', function(){
         return res
     };
 });
+
+
+mailbox.service('authService', function(){
+    var _userIsAuthenticated = false;
+
+    var _login = 'test';
+    var _password = 'test';
+
+    this.login = (login, password) => {
+        if(login === _login && password === _password){
+            _userIsAuthenticated = true;
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    this.logout = () => {
+        _userIsAuthenticated = false;
+    };
+
+    this.isLoggedIn = () => _userIsAuthenticated;
+});

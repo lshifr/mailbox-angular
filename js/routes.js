@@ -4,8 +4,8 @@
  * Link: http://stackoverflow.com/a/29491412/565518
  *
  * */
-mailbox.run(function($rootScope, $state) {
-    $rootScope.$on('$stateChangeStart', function(evt, to, params) {
+mailbox.run(function ($rootScope, $state) {
+    $rootScope.$on('$stateChangeStart', function (evt, to, params) {
         if (to.redirectTo) {
             evt.preventDefault();
             $state.go(to.redirectTo, params, {location: 'replace'});
@@ -23,19 +23,69 @@ mailbox.config($urlRouterProvider => {
         .otherwise('/');
 });
 
+/* Login */
+
+mailbox.run(function($rootScope, navigator, authService){
+    $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+        if (toState.name !== 'login' && toState.data.requireLogin && !authService.isLoggedIn()) {
+            event.preventDefault();
+            navigator.go('login', {origin: toState.name});
+        }
+    });
+
+    $rootScope.logged=false;
+
+    $rootScope.logout = () => {
+        authService.logout();
+        $rootScope.logged = false;
+        navigator.go("login");
+    };
+});
+
 
 mailbox.config($stateProvider => {
 
     $stateProvider.state('home', {
             url: '/',
-            templateUrl: 'templates/welcome.html'
+            templateUrl: 'templates/welcome.html',
+            data: {
+                requireLogin: false
+            }
         }
     );
 
 
+    $stateProvider.state('login',{
+        url: '/login',
+        templateUrl: 'templates/login.html',
+        params: {
+            origin: null
+        },
+        resolve: {
+            origin: $stateParams => $stateParams.origin
+        },
+        controller: function($scope, navigator, authService, origin, $rootScope){
+            $scope.logged = authService.isLoggedIn();
+            $scope.badCredentials = false;
+            $scope.origin = origin? origin: 'home';
+            $scope.submit = () => {
+                $scope.logged = authService.login($scope.username, $scope.password);
+                $scope.badCredentials =!$scope.logged;
+                if($scope.logged){
+                    $rootScope.logged = true;
+                    navigator.go($scope.origin, {}, {reload: true})
+                }
+            }
+        }
+
+    });
+
     $stateProvider.state('mailbox', {
             url: '/mailbox',
             redirectTo: 'mailbox.folder',
+            data: {
+                requireLogin: true
+            },
             resolve: {
                 users: httpFacade => httpFacade.getUsers(),
                 folders: httpFacade => httpFacade.getFolders()
@@ -97,11 +147,11 @@ mailbox.config($stateProvider => {
         }
     });
 
-    $stateProvider.state('mailbox.compose',{
+    $stateProvider.state('mailbox.compose', {
         url: '/compose',
         views: {
-            '':{
-                controller: function($scope, users){
+            '': {
+                controller: function ($scope, users) {
                     $scope.users = users;
                 },
                 template: `<message-compose users="users"></message-compose>`
@@ -117,14 +167,14 @@ mailbox.config($stateProvider => {
     });
 
 
-    $stateProvider.state('mailbox.messageview',{
+    $stateProvider.state('mailbox.messageview', {
         url: '/view/{messageId}',
         views: {
-            '':{
+            '': {
                 resolve: {
-                    message: (httpFacade, $stateParams)  => httpFacade.getMessage($stateParams.messageId)
+                    message: (httpFacade, $stateParams) => httpFacade.getMessage($stateParams.messageId)
                 },
-                controller: function($scope, message, users, folders, mailboxUtils){
+                controller: function ($scope, message, users, folders, mailboxUtils) {
                     $scope.message = message;
                     $scope.sender = mailboxUtils.findById(users, message.sender);
                     $scope.recipient = mailboxUtils.findById(users, message.recipient);
@@ -152,7 +202,10 @@ mailbox.config($stateProvider => {
         url: '/contacts',
         abstract: true,
         template: '<ui-view/>',
-        resolve: { users: httpFacade => httpFacade.getUsers() }
+        data: {
+            requireLogin: true
+        },
+        resolve: {users: httpFacade => httpFacade.getUsers()}
     });
 
 

@@ -377,3 +377,33 @@ tr.single-message > td.msg-inline-sender-name{
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+/* Login */
+
+.login {
+    display: inline-block;
+    /* height: 20px; */
+    padding: 4px 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #555555;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+#login-form{
+    width: 200px;
+}
+
+
+li.dropdown > a:hover{
+    background-color: #5bc0de;
+}
+
+.login-err-msg{
+    color: darkred;
+    margin: 5px 0 10px 0;
+}
