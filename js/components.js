@@ -253,7 +253,8 @@ mailbox.component('editUserInfo', {
             navigator.go(this.origin ? this.origin : 'contacts.list.current', {origin: null}, {reload: reload});
         };
 
-        this.done = () => {
+        this.submitForm = () => {
+            console.log(this.userEditForm);
             httpFacade.editUser(this.user)
                 .then(response => {
                     /* Destination state reloading is essential here, to update the data in the ctrl/view  */
