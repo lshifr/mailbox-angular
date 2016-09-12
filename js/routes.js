@@ -66,6 +66,9 @@ mailbox.config($stateProvider => {
         },
         controller: function($scope, navigator, authService, origin, $rootScope){
             $scope.logged = authService.isLoggedIn();
+            if($scope.logged){
+                navigator.go('mailbox')
+            }
             $scope.badCredentials = false;
             $scope.origin = origin? origin: 'home';
             $scope.submit = () => {
